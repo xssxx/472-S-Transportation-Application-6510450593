@@ -1,5 +1,6 @@
 package ku.cs.transport_application.controller;
 
+import com.stripe.exception.StripeException;
 import jakarta.validation.Valid;
 import ku.cs.transport_application.request.OrderRequest;
 import ku.cs.transport_application.service.CreateOrderService;
@@ -17,7 +18,7 @@ public class CreateOrderController {
     private CreateOrderService createOrderService;
 
     @PostMapping("/create-order")
-    public ResponseEntity<?> createOrder(@Valid @RequestBody OrderRequest request) {
+    public ResponseEntity<?> createOrder(@Valid @RequestBody OrderRequest request) throws StripeException {
         createOrderService.createOrder(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("Order created successfully");
     }

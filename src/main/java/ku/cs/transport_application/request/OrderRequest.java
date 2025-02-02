@@ -25,6 +25,7 @@ public class OrderRequest {
 
     private LocalDateTime date;
     private LocalDateTime deliveredDate;
+    private String paymentMethod;
 
     @NotEmpty(message = "At least one product is required.")
     private List<ProductDetailRequest> productDetails;

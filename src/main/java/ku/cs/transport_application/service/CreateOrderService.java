@@ -1,5 +1,7 @@
 package ku.cs.transport_application.service;
 
+import com.stripe.exception.StripeException;
+import ku.cs.transport_application.DTO.PaymentResponse;
 import ku.cs.transport_application.common.OrderStatus;
 import ku.cs.transport_application.entity.*;
 import ku.cs.transport_application.repository.OrderLineRepository;
@@ -8,6 +10,8 @@ import ku.cs.transport_application.repository.ProductRepository;
 import ku.cs.transport_application.repository.UserRepository;
 import ku.cs.transport_application.request.OrderRequest;
 import ku.cs.transport_application.request.ProductDetailRequest;
+import ku.cs.transport_application.service.payment.PaymentFactory;
+import ku.cs.transport_application.service.payment.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +31,10 @@ public class CreateOrderService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private PaymentFactory paymentFactory;
 
-    public void createOrder(OrderRequest request) {
+    public void createOrder(OrderRequest request) throws StripeException {
         Order order = new Order();
         order.setCustomerName(request.getCustomerName());
         order.setCustomerAddress(request.getCustomerAddress());
@@ -36,8 +42,6 @@ public class CreateOrderService {
         order.setDate(LocalDateTime.now());
 
         order.setUser(userRepository.findByUsername(request.getUsername()));
-
-        orderRepository.save(order);
 
         for (ProductDetailRequest productDetail : request.getProductDetails()) {
             Product product = new Product();
@@ -59,5 +63,11 @@ public class CreateOrderService {
             orderLineRepository.save(orderLine);
         }
 
+        order.setTotal(100);
+        PaymentService paymentService = paymentFactory.getPaymentService(request.getPaymentMethod());
+        PaymentResponse response = paymentService.createPaymentLink(order);
+        order.setPaymentLink(response.getPaymentLink());
+
+        orderRepository.save(order);
     }
 }
