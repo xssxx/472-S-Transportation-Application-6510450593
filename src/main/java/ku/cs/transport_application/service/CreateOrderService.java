@@ -41,19 +41,18 @@ public class CreateOrderService {
         order.setStatus(OrderStatus.UNCHECK);
         order.setDate(LocalDateTime.now());
         order.setUser(userRepository.findByUsername(request.getUsername()));
-        order.setTotal(100);
+        order.setTotal(0); // ยังไม่ได้คำนวณราคาสินค้า
 
-        PaymentService paymentService = paymentFactory.getPaymentService(request.getPaymentMethod());
-        PaymentResponse response = paymentService.createPaymentLink(order);
-        order.setPaymentLink(response.getPaymentLink());
-
+        // บันทึก Order ก่อน
         orderRepository.save(order);
 
+        int totalShippingCost = 0;
+
+        // สร้าง OrderLine และบันทึกทีละตัว
         for (ProductDetailRequest productDetail : request.getProductDetails()) {
             Product product = new Product();
             product.setName(productDetail.getProductName());
             product.setType(productDetail.getProductType());
-
             productRepository.save(product);
 
             OrderLine orderLine = new OrderLine();
@@ -66,7 +65,24 @@ public class CreateOrderService {
             orderLineKey.setProductId(product.getId());
             orderLine.setId(orderLineKey);
 
+            CalculatePriceService priceService = new CalculatePriceService();
+            int shippingCost = priceService.calculateShipping(product.getType(), productDetail.getQuantity());
+            totalShippingCost += shippingCost;
+
+            // บันทึก OrderLine
             orderLineRepository.save(orderLine);
         }
+
+        // คำนวณราคาทั้งหมด (รวมราคาสินค้าและค่าขนส่ง)
+        order.setTotal(totalShippingCost);
+
+        // สร้างลิงก์การชำระเงิน
+        PaymentService paymentService = paymentFactory.getPaymentService(request.getPaymentMethod());
+        PaymentResponse response = paymentService.createPaymentLink(order);
+        order.setPaymentLink(response.getPaymentLink());
+
+        // อัพเดตข้อมูล order ที่มี payment link
+        orderRepository.save(order);
     }
+
 }

@@ -4,6 +4,7 @@
     <h2 class="order-id">Order ID: {{ orderId }}</h2>
     <p class="customer-name">Customer Name: {{ customerName }}</p>
     <p class="due-date">Date: {{ formattedDate(date) }}</p>
+    <p>Total: {{ total }}</p>
     <button class="details-button" @click="viewDetails">Details</button>
     <button class="details-button" @click="payment">Pay</button>
     <button v-if="status === 'delivered'" class="bill-button">Bill</button>
@@ -30,6 +31,10 @@ export default {
     },
     customerName: {
       type: String,
+      required: true,
+    },
+    total: {
+      type: Number,
       required: true,
     },
     paymentLink: {
