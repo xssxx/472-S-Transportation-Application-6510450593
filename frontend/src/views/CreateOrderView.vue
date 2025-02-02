@@ -7,19 +7,51 @@
         <div class="customer-info">
           <div class="text-box">
             <label for="customerName">Customer Name:</label>
-            <input type="text" id="customerName" class="input" placeholder="Enter Customer Name" v-model="orderRequest.customerName" required />
+            <input
+              type="text"
+              id="customerName"
+              class="input"
+              placeholder="Enter Customer Name"
+              v-model="orderRequest.customerName"
+              required
+            />
           </div>
 
           <div class="text-box">
             <label for="customerAddress">Customer Address:</label>
-            <input type="text" id="customerAddress" class="input" placeholder="Enter Customer Address" v-model="orderRequest.customerAddress" required />
+            <input
+              type="text"
+              id="customerAddress"
+              class="input"
+              placeholder="Enter Customer Address"
+              v-model="orderRequest.customerAddress"
+              required
+            />
+          </div>
+
+          <div>
+            <span>Select Payment Type: </span>
+            <select v-model="orderRequest.paymentMethod" required>
+              <option value="promptPayService">Promptpay</option>
+              <option value="creditCardService">Credit Card</option>
+            </select>
           </div>
         </div>
 
         <h3>Products</h3>
         <div class="scroll-container">
-          <div class="product-fields" v-for="(product, index) in orderRequest.productDetails" :key="index">
-            <input type="text" class="input" placeholder="Product Name" v-model="product.productName" required />
+          <div
+            class="product-fields"
+            v-for="(product, index) in orderRequest.productDetails"
+            :key="index"
+          >
+            <input
+              type="text"
+              class="input"
+              placeholder="Product Name"
+              v-model="product.productName"
+              required
+            />
             <select v-model="product.productType" required>
               <option disabled value="">Select Type</option>
               <option value="LIGHTWEIGHT">Lightweight</option>
@@ -28,11 +60,23 @@
               <option value="HAZARDOUS">Hazardous</option>
               <option value="SPECIALTY">Specialty</option>
             </select>
-            <input type="number" class="input" placeholder="Quantity" v-model.number="product.quantity" min="1" required />
-            <button type="button" class="x" @click="removeProduct(index)">✖</button>
+            <input
+              type="number"
+              class="input"
+              placeholder="Quantity"
+              v-model.number="product.quantity"
+              min="1"
+              required
+            />
+
+            <button type="button" class="x" @click="removeProduct(index)">
+              ✖
+            </button>
           </div>
         </div>
-        <button type="button" class="add" @click="addProduct">+ Add Product</button>
+        <button type="button" class="add" @click="addProduct">
+          + Add Product
+        </button>
         <button type="submit" class="accept-button">Accept</button>
       </form>
     </div>
@@ -53,17 +97,20 @@ export default {
   data() {
     return {
       orderRequest: {
-        customerName: '',
-        customerAddress: '',
-        productDetails: [
-          { productName: '', productType: '', quantity: 1 }
-        ]
-      }
+        customerName: "",
+        customerAddress: "",
+        paymentMethod: "",
+        productDetails: [{ productName: "", productType: "", quantity: 1 }],
+      },
     };
   },
   methods: {
     addProduct() {
-      this.orderRequest.productDetails.push({ productName: '', productType: '', quantity: 1 });
+      this.orderRequest.productDetails.push({
+        productName: "",
+        productType: "",
+        quantity: 1,
+      });
     },
     removeProduct(index) {
       this.orderRequest.productDetails.splice(index, 1);
@@ -71,38 +118,38 @@ export default {
     async submitOrder() {
       const orderData = {
         ...this.orderRequest,
-        username: this.username
+        username: this.username,
       };
       try {
-        const response = await fetch('http://localhost:8080/create-order', {
-          method: 'POST',
+        const response = await fetch("http://localhost:8080/create-order", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(orderData)
+          body: JSON.stringify(orderData),
         });
 
         if (response.ok) {
-          alert('Order created successfully');
+          alert("Order created successfully");
           this.resetForm();
           this.$router.push("/orders");
         } else {
           const errorData = await response.json();
-          alert(`Error: ${errorData.message || 'Failed to create order'}`);
+          alert(`Error: ${errorData.message || "Failed to create order"}`);
         }
       } catch (error) {
-        console.error('Error:', error);
-        alert('There was an error creating the order');
+        console.error("Error:", error);
+        alert("There was an error creating the order");
       }
     },
     resetForm() {
       this.orderRequest = {
-        customerName: '',
-        customerAddress: '',
-        productDetails: [{ productName: '', productType: '', quantity: 1 }]
+        customerName: "",
+        customerAddress: "",
+        productDetails: [{ productName: "", productType: "", quantity: 1 }],
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -111,7 +158,7 @@ export default {
   max-width: 70%;
   height: 94vh;
   margin: 0 auto;
-  background-color: #f9f9f9; 
+  background-color: #f9f9f9;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -119,7 +166,7 @@ export default {
   max-width: 80%;
   height: 89.7%;
   margin: auto;
-  background-color: #f9f9f9; 
+  background-color: #f9f9f9;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
@@ -162,27 +209,29 @@ h2 {
   display: inline-block;
   text-align: left;
   margin-top: 5%;
-  margin-bottom: 0px; 
-  margin-left: 10%; 
+  margin-bottom: 0px;
+  margin-left: 10%;
 }
 
-h3{
+h3 {
   margin-top: 2%;
 }
 
 .input {
   width: 100%;
   max-width: 500px;
-  padding: 5px; 
+  padding: 5px;
   box-sizing: border-box;
 }
 
-.accept-button, .add {
+.accept-button,
+.add {
   margin-top: 20px;
   background-color: #189e1f;
 }
 
-.accept-button:hover, .add:hover {
+.accept-button:hover,
+.add:hover {
   background-color: #24be2c;
 }
 

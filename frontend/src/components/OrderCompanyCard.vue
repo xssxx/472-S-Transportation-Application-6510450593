@@ -5,12 +5,13 @@
     <p class="customer-name">Customer Name: {{ customerName }}</p>
     <p class="due-date">Date: {{ formattedDate(date) }}</p>
     <button class="details-button" @click="viewDetails">Details</button>
+    <button class="details-button" @click="payment">Pay</button>
     <button v-if="status === 'delivered'" class="bill-button">Bill</button>
   </div>
 </template>
 
 <script>
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 export default {
   name: "OrderCompanyCard",
@@ -31,14 +32,24 @@ export default {
       type: String,
       required: true,
     },
+    paymentLink: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     viewDetails() {
       console.log(`Viewing details for order ID: ${this.orderId}`);
-      this.$router.push({ name: 'order-detail', params: { orderId: this.orderId } });
+      this.$router.push({
+        name: "order-detail",
+        params: { orderId: this.orderId },
+      });
     },
     formattedDate() {
-      return dayjs(this.date).format('DD/MM/YYYY HH:mm:ss');
+      return dayjs(this.date).format("DD/MM/YYYY HH:mm:ss");
+    },
+    payment() {
+      window.open(this.paymentLink);
     },
   },
   computed: {
@@ -80,7 +91,7 @@ export default {
 .customer-address {
   font-family: "Inter", sans-serif;
   margin: 0;
-  margin-bottom :10px;
+  margin-bottom: 10px;
 }
 
 .details-button,
@@ -109,27 +120,27 @@ export default {
 
 .status-uncheck {
   font-family: "Inter", sans-serif;
-  background-color: #D3D3D3;
+  background-color: #d3d3d3;
 }
 
 .status-checked {
   font-family: "Inter", sans-serif;
-  background-color: #1E90FF;
+  background-color: #1e90ff;
 }
 
 .status-ongoing {
   font-family: "Inter", sans-serif;
-  background-color: #FFA500;
+  background-color: #ffa500;
 }
 
 .status-delivered {
   font-family: "Inter", sans-serif;
-  background-color: #32CD32;
+  background-color: #32cd32;
 }
 
 .status-uploaded {
   font-family: "Inter", sans-serif;
-  background-color: #8A2BE2;
+  background-color: #8a2be2;
 }
 
 .status-completed {

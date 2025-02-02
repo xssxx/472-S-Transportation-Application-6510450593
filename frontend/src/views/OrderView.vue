@@ -18,13 +18,15 @@
           </select>
         </div>
         <component
-            v-for="order in orders"
-            :key="order.id"
-            :is="orderComponent"
-            :orderId="order.id"
-            :date="order.date || 'N/A'"
-            :status="order.status"
-            :customerName="order.customerName"
+          v-for="order in orders"
+          :key="order.id"
+          :total="order.total"
+          :paymentLink="order.paymentLink"
+          :is="orderComponent"
+          :orderId="order.id"
+          :date="order.date || 'N/A'"
+          :status="order.status"
+          :customerName="order.customerName"
         />
       </div>
     </div>
@@ -94,13 +96,19 @@ export default {
     },
     async fetchOrders() {
       try {
-        const response = await axios.get("http://localhost:8080/orders/all-orders?fields=id,date,status,customerName");
-        this.orders = response.data.map(order => ({
-          id: order.id,
-          date: order.date || "N/A",
-          status: order.status,
-          customerName: order.customerName
-        })).sort((a, b) => new Date(b.date) - new Date(a.date));
+        const response = await axios.get(
+          "http://localhost:8080/orders/all-orders?fields=id,date,status,customerName,total,paymentLink"
+        );
+        this.orders = response.data
+          .map((order) => ({
+            id: order.id,
+            date: order.date || "N/A",
+            status: order.status,
+            customerName: order.customerName,
+            total: order.total,
+            paymentLink: order.paymentLink,
+          }))
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
@@ -133,38 +141,54 @@ export default {
 
       try {
         const response = await axios.get(endpoint);
-        this.orders = response.data.map(order => ({
-          id: order.id,
-          date: order.date || "N/A",
-          status: order.status,
-          customerName: order.customerName,
-        })).sort((a, b) => new Date(b.date) - new Date(a.date));
+        this.orders = response.data
+          .map((order) => ({
+            id: order.id,
+            date: order.date || "N/A",
+            status: order.status,
+            customerName: order.customerName,
+            total: order.total,
+            paymentLink: order.paymentLink,
+          }))
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
       } catch (error) {
         console.error("Error fetching filtered orders:", error);
       }
     },
     async fetchOwnOrders(userId) {
       try {
-        const response = await axios.get(`http://localhost:8080/orders/user/${userId}`);
-        this.orders = response.data.map(order => ({
-          id: order.id,
-          date: order.date || "N/A",
-          status: order.status,
-          customerName: order.customerName,
-        })).sort((a, b) => new Date(b.date) - new Date(a.date));
+        const response = await axios.get(
+          `http://localhost:8080/orders/user/${userId}`
+        );
+        this.orders = response.data
+          .map((order) => ({
+            id: order.id,
+            date: order.date || "N/A",
+            status: order.status,
+            customerName: order.customerName,
+            total: order.total,
+            paymentLink: order.paymentLink,
+          }))
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
       } catch (error) {
         console.error("Error fetching own orders:", error);
       }
     },
     async fetchWorkerOrders(workerId) {
       try {
-        const response = await axios.get(`http://localhost:8080/orders/worker/${workerId}`);
-        this.orders = response.data.map(order => ({
-          id: order.id,
-          date: order.date || "N/A",
-          status: order.status,
-          customerName: order.customerName,
-        })).sort((a, b) => new Date(b.date) - new Date(a.date));
+        const response = await axios.get(
+          `http://localhost:8080/orders/worker/${workerId}`
+        );
+        this.orders = response.data
+          .map((order) => ({
+            id: order.id,
+            date: order.date || "N/A",
+            status: order.status,
+            customerName: order.customerName,
+            total: order.total,
+            paymentLink: order.paymentLink,
+          }))
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
       } catch (error) {
         console.error("Error fetching worker orders:", error);
       }
@@ -172,8 +196,6 @@ export default {
   },
 };
 </script>
-
-
 
 <style scoped>
 :root {

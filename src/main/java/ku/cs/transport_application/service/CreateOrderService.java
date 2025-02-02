@@ -40,8 +40,14 @@ public class CreateOrderService {
         order.setCustomerAddress(request.getCustomerAddress());
         order.setStatus(OrderStatus.UNCHECK);
         order.setDate(LocalDateTime.now());
-
         order.setUser(userRepository.findByUsername(request.getUsername()));
+        order.setTotal(100);
+
+        PaymentService paymentService = paymentFactory.getPaymentService(request.getPaymentMethod());
+        PaymentResponse response = paymentService.createPaymentLink(order);
+        order.setPaymentLink(response.getPaymentLink());
+
+        orderRepository.save(order);
 
         for (ProductDetailRequest productDetail : request.getProductDetails()) {
             Product product = new Product();
@@ -62,12 +68,5 @@ public class CreateOrderService {
 
             orderLineRepository.save(orderLine);
         }
-
-        order.setTotal(100);
-        PaymentService paymentService = paymentFactory.getPaymentService(request.getPaymentMethod());
-        PaymentResponse response = paymentService.createPaymentLink(order);
-        order.setPaymentLink(response.getPaymentLink());
-
-        orderRepository.save(order);
     }
 }

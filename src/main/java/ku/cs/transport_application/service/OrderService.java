@@ -50,7 +50,9 @@ public class OrderService {
                                 order.getCustomerName(),
                                 order.getDate(),
                                 order.getDeliveredDate(),
-                                order.getUser().getName()
+                                order.getUser().getName(),
+                                order.getTotal(),
+                                order.getPaymentLink()
                         ))
                         .collect(Collectors.toList());
             }
@@ -70,7 +72,9 @@ public class OrderService {
                             order.getCustomerName(),
                             order.getDate(),
                             order.getDeliveredDate(),
-                            order.getUser().getName()
+                            order.getUser().getName(),
+                            order.getTotal(),
+                            order.getPaymentLink()
                     ))
                     .collect(Collectors.toList());
         }
@@ -85,7 +89,9 @@ public class OrderService {
                         order.getCustomerName(),
                         order.getDate(),
                         order.getDeliveredDate(),
-                        order.getUser().getName()
+                        order.getUser().getName(),
+                        order.getTotal(),
+                        order.getPaymentLink()
                 ))
                 .collect(Collectors.toList());
     }
@@ -98,7 +104,9 @@ public class OrderService {
                         order.getCustomerName(),
                         order.getDate(),
                         order.getDeliveredDate(),
-                        order.getUser().getName()
+                        order.getUser().getName(),
+                        order.getTotal(),
+                        order.getPaymentLink()
                 ))
                 .collect(Collectors.toList());
     }
@@ -111,7 +119,9 @@ public class OrderService {
                         order.getCustomerName(),
                         order.getDate(),
                         order.getDeliveredDate(),
-                        order.getUser().getName()
+                        order.getUser().getName(),
+                        order.getTotal(),
+                        order.getPaymentLink()
                 ))
                 .collect(Collectors.toList());
     }
@@ -124,7 +134,9 @@ public class OrderService {
                         order.getCustomerName(),
                         order.getDate(),
                         order.getDeliveredDate(),
-                        order.getUser().getName()
+                        order.getUser().getName(),
+                        order.getTotal(),
+                        order.getPaymentLink()
                 ))
                 .collect(Collectors.toList());
     }
@@ -137,7 +149,9 @@ public class OrderService {
                         order.getCustomerName(),
                         order.getDate(),
                         order.getDeliveredDate(),
-                        order.getUser().getName()
+                        order.getUser().getName(),
+                        order.getTotal(),
+                        order.getPaymentLink()
                 ))
                 .collect(Collectors.toList());
     }
@@ -150,7 +164,9 @@ public class OrderService {
                         order.getCustomerName(),
                         order.getDate(),
                         order.getDeliveredDate(),
-                        order.getUser().getName()
+                        order.getUser().getName(),
+                        order.getTotal(),
+                        order.getPaymentLink()
                 ))
                 .collect(Collectors.toList());
     }
@@ -170,7 +186,9 @@ public class OrderService {
                         order.getCustomerName(),
                         order.getDate(),
                         order.getDeliveredDate(),
-                        order.getUser().getName()
+                        order.getUser().getName(),
+                        order.getTotal(),
+                        order.getPaymentLink()
                 ))
                 .collect(Collectors.toList());
     }

@@ -16,4 +16,7 @@ public class OrderDTO {
     private LocalDateTime date;
     private LocalDateTime deliveredDate;
     private String creatorName;
+
+    private double total;
+    private String paymentLink;
 }
