@@ -3,6 +3,8 @@ package ku.cs.transport_application.entity;
 import jakarta.persistence.*;
 import ku.cs.transport_application.common.OrderStatus;
 import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.UUID;
 public class Order {
     @Id
     @GeneratedValue
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
 
     private OrderStatus status;

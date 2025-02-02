@@ -3,6 +3,8 @@ package ku.cs.transport_application.entity;
 import jakarta.persistence.*;
 import ku.cs.transport_application.common.ProductType;
 import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.UUID;
 public class Product {
     @Id
     @GeneratedValue
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
 
     private String name;
