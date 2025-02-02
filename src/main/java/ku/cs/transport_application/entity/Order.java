@@ -23,6 +23,10 @@ public class Order {
     private LocalDateTime date;
     private LocalDateTime deliveredDate;
     private String shipmentDocDir;
+    private double total;
+
+    @Column(columnDefinition = "TEXT")
+    private String paymentLink;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
