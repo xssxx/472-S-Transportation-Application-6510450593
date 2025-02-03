@@ -9,12 +9,18 @@
           <div class="order-info-box">
             <div class="order-info-left">
               <p><strong>Date:</strong> {{ formattedDate(order.date) }}</p>
-              <p><strong>Transportation Worker:</strong> {{ order.workerUsername || 'N/A' }}</p>
+              <p>
+                <strong>Transportation Worker:</strong>
+                {{ order.workerUsername || "N/A" }}
+              </p>
             </div>
             <div class="order-info-right">
               <p><strong>Status:</strong> {{ order.status }}</p>
               <p><strong>Customer Name:</strong> {{ order.customerName }}</p>
-              <p><strong>Customer Address:</strong> {{ order.customerAddress || 'N/A' }}</p>
+              <p>
+                <strong>Customer Address:</strong>
+                {{ order.customerAddress || "N/A" }}
+              </p>
             </div>
           </div>
         </div>
@@ -42,10 +48,32 @@
           </table>
         </div>
 
-        <button v-if="userRole === 'ADMIN' && order.status === 'UNCHECK'" @click="checked" class="checked-button">Checked</button>
-        <button v-if="userRole === 'ADMIN' && order.status === 'UPLOADED'" @click="clickComplete" class="checked-button">Complete</button>
-        <button v-if="userRole === 'ADMIN' && order.status === 'UPLOADED'" @click="showFileModal" class="file-pop">File</button>
-        <FileViewerModal :isVisible="isFileModalVisible" :fileUrl="fileUrl" @close="isFileModalVisible = false" />
+        <button
+          v-if="userRole === 'ADMIN' && order.status === 'UNCHECK'"
+          @click="checked"
+          class="checked-button"
+        >
+          Checked
+        </button>
+        <button
+          v-if="userRole === 'ADMIN' && order.status === 'UPLOADED'"
+          @click="clickComplete"
+          class="checked-button"
+        >
+          Complete
+        </button>
+        <button
+          v-if="userRole === 'ADMIN' && order.status === 'UPLOADED'"
+          @click="showFileModal"
+          class="file-pop"
+        >
+          File
+        </button>
+        <FileViewerModal
+          :isVisible="isFileModalVisible"
+          :fileUrl="fileUrl"
+          @close="isFileModalVisible = false"
+        />
       </div>
     </div>
   </div>
@@ -62,13 +90,13 @@ export default {
   name: "OrderDetail",
   components: {
     Header,
-    FileViewerModal
+    FileViewerModal,
   },
   data() {
     return {
       order: null,
       isFileModalVisible: false,
-      fileUrl: ""
+      fileUrl: "",
     };
   },
   computed: {
@@ -77,90 +105,97 @@ export default {
   methods: {
     async fetchOrderDetails() {
       try {
-          const response = await axios.get(`http://localhost:8080/orders/order-detail/${this.$route.params.orderId}`);
-          this.order = response.data;
-          console.log("Order data:", this.order);
+        const response = await axios.get(
+          `http://localhost:8080/orders/order-detail/${this.$route.params.orderId}`
+        );
+        this.order = response.data;
+        console.log("Order data:", this.order);
       } catch (error) {
-          console.error("Error fetching order details:", error);
+        console.error("Error fetching order details:", error);
       }
     },
 
     formattedDate(date) {
-      return dayjs(date).format('DD/MM/YYYY HH:mm:ss');
+      return dayjs(date).format("DD/MM/YYYY HH:mm:ss");
     },
     checked() {
       const orderId = this.$route.params.orderId;
       console.log("order: ", orderId);
       const status = "CHECKED";
 
-      fetch(`http://localhost:8080/orders/order-detail/${orderId}/change-status`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
+      fetch(
+        `http://localhost:8080/orders/order-detail/${orderId}/change-status?staus=CHECKED`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
             orderId: orderId,
-            status: status
-        })
-      })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+            status: status,
+          }),
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log(data.message);
-        alert(data.message || 'Order status updated successfully');
-            this.$router.push({ name: 'orders' });
-    })
-    .catch(error => {
-        console.error('Error updating order status:', error);
-        alert('Error updating order status');
-    });
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data.message);
+          alert(data.message || "Order status updated successfully");
+          this.$router.push({ name: "orders" });
+        })
+        .catch((error) => {
+          console.error("Error updating order status:", error);
+          alert("Error updating order status");
+        });
     },
     clickComplete() {
       const orderId = this.$route.params.orderId;
       console.log("order: ", orderId);
       const status = "COMPLETED";
 
-      fetch(`http://localhost:8080/orders/order-detail/${orderId}/change-status`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
+      fetch(
+        `http://localhost:8080/orders/order-detail/${orderId}/change-status`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
             orderId: orderId,
-            status: status
-        })
-      })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+            status: status,
+          }),
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log(data.message);
-        alert(data.message || 'Order status updated successfully');
-            this.$router.push({ name: 'orders' });
-    })
-    .catch(error => {
-        console.error('Error updating order status:', error);
-        alert('Error updating order status');
-    });
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data.message);
+          alert(data.message || "Order status updated successfully");
+          this.$router.push({ name: "orders" });
+        })
+        .catch((error) => {
+          console.error("Error updating order status:", error);
+          alert("Error updating order status");
+        });
     },
     showFileModal() {
       this.fileUrl = `http://localhost:8080/orders/order-detail/${this.$route.params.orderId}/shipment-doc`;
       this.isFileModalVisible = true;
-    }
+    },
   },
   mounted() {
     this.fetchOrderDetails();
   },
 };
 </script>
-
 
 <style>
 :root {
@@ -230,7 +265,6 @@ export default {
   cursor: pointer;
   width: auto;
   margin-bottom: 20px;
-  
 }
 
 .checked-button {

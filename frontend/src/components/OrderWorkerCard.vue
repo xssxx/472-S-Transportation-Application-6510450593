@@ -6,16 +6,16 @@
     <p class="due-date">Date: {{ formattedDate(date) }}</p>
     <div class="button-group">
       <button class="details-button" @click="viewDetails">Details</button>
-      <button
+      <!-- <button
         class="on-going-button"
         v-if="status === 'ONGOING' && isOnGoingClicked === false"
         @click="OnGoing"
       >
         On Going
-      </button>
+      </button> -->
       <button
         class="success-button"
-        v-if="status === 'ONGOING' && isOnGoingClicked"
+        v-if="status === 'ONGOING' && !isOnGoingClicked"
         @click="Success"
       >
         Success
