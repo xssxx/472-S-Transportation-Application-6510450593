@@ -1,4 +1,4 @@
-package ku.cs.transport_application.service;
+package ku.cs.transport_application.service.payment;
 
 import ku.cs.transport_application.common.ProductType;
 
