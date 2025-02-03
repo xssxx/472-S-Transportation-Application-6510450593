@@ -81,6 +81,21 @@ public class OrderService {
         return null;
     }
 
+    public List<OrderDTO> getUnpaidOrder() {
+        return orderRepository.findByStatus(UNPAID).stream()
+                .map(order -> new OrderDTO(
+                        order.getId(),
+                        order.getStatus(),
+                        order.getCustomerName(),
+                        order.getDate(),
+                        order.getDeliveredDate(),
+                        order.getUser().getName(),
+                        order.getTotal(),
+                        order.getPaymentLink()
+                ))
+                .collect(Collectors.toList());
+    }
+
     public List<OrderDTO> getUncheckOrder() {
         return orderRepository.findByStatus(UNCHECK).stream()
                 .map(order -> new OrderDTO(

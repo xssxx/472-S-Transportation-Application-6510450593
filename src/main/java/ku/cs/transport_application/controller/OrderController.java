@@ -32,6 +32,11 @@ public class OrderController {
     @Autowired
     private TransportationWorkerService transportationWorkerService;
 
+    @GetMapping("/orders/unpaid-orders")
+    public ResponseEntity<List<OrderDTO>> getUnpaidOrder() {
+        return ResponseEntity.ok(orderService.getUnpaidOrder());
+    }
+
     @GetMapping("/orders/uncheck-orders")
     public ResponseEntity<List<OrderDTO>> getUncheckOrder() {
         return ResponseEntity.ok(orderService.getUncheckOrder());

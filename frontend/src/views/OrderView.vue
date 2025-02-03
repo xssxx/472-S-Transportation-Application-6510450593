@@ -9,6 +9,7 @@
           <label for="status">Filter by Status:</label>
           <select v-model="selectedStatus" @change="fetchOrdersFilter">
             <option value="all">All</option>
+            <option value="unpaid">Unpaid</option>
             <option value="uncheck">Unchecked</option>
             <option value="check">Checked</option>
             <option value="on-going">On-going</option>
@@ -116,6 +117,9 @@ export default {
     async fetchOrdersFilter() {
       let endpoint;
       switch (this.selectedStatus) {
+        case "unpaid":
+          endpoint = "http://localhost:8080/orders/unpaid-orders";
+          break;
         case "uncheck":
           endpoint = "http://localhost:8080/orders/uncheck-orders";
           break;

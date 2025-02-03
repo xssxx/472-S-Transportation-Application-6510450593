@@ -38,12 +38,12 @@ public class CreateOrderService {
         Order order = new Order();
         order.setCustomerName(request.getCustomerName());
         order.setCustomerAddress(request.getCustomerAddress());
-        order.setStatus(OrderStatus.UNCHECK);
+        order.setStatus(OrderStatus.UNPAID);
         order.setDate(LocalDateTime.now());
         order.setUser(userRepository.findByUsername(request.getUsername()));
         order.setTotal(0); // ยังไม่ได้คำนวณราคาสินค้า
 
-        // บันทึก Order ก่อน
+        // บันทึก Order ก่อน ไม่งั้น order line จะ generate order id มั่ว
         orderRepository.save(order);
 
         int totalShippingCost = 0;
