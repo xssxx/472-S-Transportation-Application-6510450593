@@ -23,6 +23,7 @@ public class User {
     private String password;
     private String phoneNumber;
     private String email;
+    private String profilePicture;
     private UserRole role;
 
 }

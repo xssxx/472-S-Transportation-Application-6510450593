@@ -17,5 +17,6 @@ public class TransportationWorkerDTO {
     private String name;
     private String phoneNumber;
     private String email;
+    private String profilePicture;
     private TransportationWorkerStatus status;
 }

@@ -1,7 +1,12 @@
 package ku.cs.transport_application.service;
 
+import ku.cs.transport_application.common.UserRole;
 import ku.cs.transport_application.entity.Order;
+import ku.cs.transport_application.entity.TransportationWorker;
+import ku.cs.transport_application.entity.User;
 import ku.cs.transport_application.repository.OrderRepository;
+import ku.cs.transport_application.repository.TransportationWorkerRepository;
+import ku.cs.transport_application.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -22,6 +27,12 @@ public class FileService {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    TransportationWorkerRepository transportationWorkerRepository;
 
     public void uploadFile(UUID orderID, MultipartFile file) throws IOException {
         String uploadDir = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images" + File.separator + "uploads";
@@ -65,4 +76,49 @@ public class FileService {
             throw new RuntimeException("Error retrieving file: " + dir, ex);
         }
     }
+
+    public void uploadProfilePicture(UUID id, MultipartFile file, UserRole role) throws IOException {
+        String uploadDir;
+        String newFileName;
+        String entityName;
+
+        switch (role) {
+            case WORKER:
+                uploadDir = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images" + File.separator + "workers";
+                entityName = "workers";
+                break;
+            case ADMIN:
+            case USER:
+            default:
+                uploadDir = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "images" + File.separator + "users";
+                entityName = "users";
+                break;
+        }
+
+        String fileName = file.getOriginalFilename();
+        assert fileName != null;
+
+        Files.createDirectories(Paths.get(uploadDir));
+
+        String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+        newFileName = UUID.randomUUID() + fileExtension;
+
+        // บันทึกไฟล์
+        Path path = Paths.get(uploadDir, newFileName);
+        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+        // อัปเดตข้อมูลตาม role
+        if (role == UserRole.WORKER) {
+            TransportationWorker worker = transportationWorkerRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Worker not found"));
+            worker.setProfilePicture("/images/" + entityName + "/" + newFileName);
+            transportationWorkerRepository.save(worker);
+        } else {
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            user.setProfilePicture("/images/" + entityName + "/" + newFileName);
+            userRepository.save(user);
+        }
+    }
+
 }

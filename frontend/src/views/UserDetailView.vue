@@ -100,7 +100,7 @@ export default {
   },
 };
 </script>
-  
+
   <style>
   :root {
     --main-bg-color: #f5f5f5;
@@ -109,20 +109,20 @@ export default {
     --button-text-color: #ffffff;
     --border-color: #ddd;
   }
-  
+
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
-  
+
   .main-container {
     display: flex;
     justify-content: center;
     flex: 1;
     padding: 20px;
   }
-  
+
   .user-detail-container {
     background-color: #e0e0e0;
     width: 80%;
@@ -131,7 +131,7 @@ export default {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: relative;
   }
-  
+
   .user-id-text {
     font-size: 20px;
     font-weight: bold;
@@ -139,7 +139,7 @@ export default {
     top: 20px;
     left: 20px;
   }
-  
+
   .user-info-wrapper {
     background-color: var(--sub-bg-color);
     border: 1px solid var(--border-color);
@@ -148,7 +148,7 @@ export default {
     margin-bottom: 30px;
     margin-top: 60px;
   }
-  
+
   .back-button {
     position: absolute;
     top: 20px;
@@ -162,48 +162,48 @@ export default {
     width: auto;
     margin-bottom: 20px;
   }
-  
+
   .user-info-box {
     display: flex;
     justify-content: space-between;
     background-color: #ffffff;
     border-radius: 1px;
   }
-  
+
   .user-info-right {
     display: flex;
     flex-direction: column;
     text-align: left;
     margin-right: 100px;
   }
-  
+
   .user-info-left {
     display: flex;
     flex-direction: column;
     text-align: left;
     margin-left: 5px;
   }
-  
+
   .user-info-left p,
   .user-info-right p {
     margin-bottom: 10px;
     font-size: 16px;
   }
-  
+
   .order-history-box {
     margin-bottom: 30px;
   }
-  
+
   .order-history-title {
     font-size: 18px;
     margin-bottom: 15px;
   }
-  
+
   .order-history-table {
     width: 100%;
     border-collapse: collapse;
   }
-  
+
   .order-history-table th,
   .order-history-table td {
     border: 1px solid var(--border-color);
@@ -211,4 +211,3 @@ export default {
     text-align: left;
   }
   </style>
-  

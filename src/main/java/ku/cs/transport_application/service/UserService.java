@@ -27,4 +27,8 @@ public class UserService {
         return userRepository.findById(id)
                 .orElse(null);
     }
+
+    public void setUser(User user) {
+        userRepository.save(user);
+    }
 }

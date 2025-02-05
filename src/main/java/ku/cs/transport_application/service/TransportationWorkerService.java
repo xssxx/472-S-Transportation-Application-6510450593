@@ -41,4 +41,25 @@ public class TransportationWorkerService {
     public TransportationWorker findWorkerByUsername(String username) {
         return transportationWorkerRepository.findByUsername(username);
     }
+
+    public TransportationWorkerDTO findWorkerByIdWithDTO(UUID workerId) {
+        transportationWorkerRepository.findById(workerId);
+        TransportationWorkerDTO dto = new TransportationWorkerDTO();
+        dto.setId(workerId);
+        dto.setUsername(findWorkerByUsername(workerId.toString()).getName());
+        dto.setName(findWorkerByUsername(workerId.toString()).getName());
+        dto.setPhoneNumber(findWorkerByUsername(workerId.toString()).getPhoneNumber());
+        dto.setEmail(findWorkerByUsername(workerId.toString()).getEmail());
+        dto.setProfilePicture(findWorkerByUsername(workerId.toString()).getProfilePicture());
+        dto.setStatus(findWorkerByUsername(workerId.toString()).getStatus());
+        return dto;
+    }
+
+    public TransportationWorker findWorkerById(UUID workerId) {
+        return transportationWorkerRepository.findById(workerId);
+    }
+
+    public void setTransportationWorker(TransportationWorker worker) {
+        transportationWorkerRepository.save(worker);
+    }
 }

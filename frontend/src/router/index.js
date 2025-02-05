@@ -111,6 +111,13 @@ const routes = [
     name: "fail",
     component: FailView,
   },
+  {
+    path: "/edit-profile",
+    name: "edit-profile",
+    component: () => import("@/views/EditProfileView.vue"),
+    meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
+  },
+
 ];
 
 const router = createRouter({
