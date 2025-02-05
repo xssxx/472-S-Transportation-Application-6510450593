@@ -278,4 +278,19 @@ public class OrderService {
             orderRepository.save(recordOrder);
         }
     }
+
+    public List<OrderDTO> searchOrders(String keyword) {
+        return orderRepository.findByCustomerName(keyword).stream()
+                .map(order -> new OrderDTO(
+                        order.getId(),
+                        order.getStatus(),
+                        order.getCustomerName(),
+                        order.getDate(),
+                        order.getDeliveredDate(),
+                        order.getUser().getName(),
+                        order.getTotal(),
+                        order.getPaymentLink()
+                ))
+                .collect(Collectors.toList());
+    }
 }
