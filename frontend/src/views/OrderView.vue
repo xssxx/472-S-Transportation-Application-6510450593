@@ -5,14 +5,6 @@
     <div class="main-container">
       <div class="order-container">
         <h2 class="order-title">Order</h2>
-        <input type="text" v-model="searchQuery" placeholder="Search..." />
-        
-        <div class="item-order-searchbar" v-for="order in filteredOrders" :key="order.id">
-        </div>
-
-        <div class="item-error-searchbar" v-if="searchQuery && !filteredOrders.length">
-          <p>No results found!</p>
-        </div>
 
         <div v-if="userRole === 'ADMIN'">
           <label for="status">Filter by Status:</label>
@@ -26,6 +18,15 @@
             <option value="uploaded">Uploaded</option>
             <option value="complete">Complete</option>
           </select>
+        </div>
+        
+        <input type="text" v-model="searchQuery" placeholder="Search..." />
+        
+        <div class="item-order-searchbar" v-for="order in filteredOrders" :key="order.id">
+        </div>
+
+        <div class="item-error-searchbar" v-if="searchQuery && !filteredOrders.length">
+          <p>No results found!</p>
         </div>
 
         <component
@@ -158,6 +159,8 @@ export default {
 
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
 :root {
   --main-bg-color: #4a4a4a;
   --sub-bg-color: #eeeeee;
