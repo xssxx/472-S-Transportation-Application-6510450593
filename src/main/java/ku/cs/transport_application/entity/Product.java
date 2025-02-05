@@ -1,5 +1,6 @@
 package ku.cs.transport_application.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import ku.cs.transport_application.common.ProductType;
 import lombok.Data;
@@ -23,5 +24,6 @@ public class Product {
     private ProductType type;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<OrderLine> orderLines = new ArrayList<>();
 }

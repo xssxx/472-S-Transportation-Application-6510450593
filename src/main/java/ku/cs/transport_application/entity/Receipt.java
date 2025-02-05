@@ -1,5 +1,6 @@
 package ku.cs.transport_application.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -15,8 +16,10 @@ public class Receipt {
     @GeneratedValue
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID receiptId;
+
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
+
     private LocalDateTime createAt;
 }

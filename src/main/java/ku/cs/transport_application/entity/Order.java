@@ -1,5 +1,6 @@
 package ku.cs.transport_application.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import ku.cs.transport_application.common.OrderStatus;
 import lombok.Data;
@@ -31,15 +32,18 @@ public class Order {
     @Column(columnDefinition = "TEXT")
     private String paymentLink;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "worker_id")
+    @JsonIgnore
     private TransportationWorker worker;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<OrderLine> orderLines = new ArrayList<>();
 
 }
