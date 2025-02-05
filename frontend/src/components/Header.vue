@@ -1,46 +1,59 @@
 <template>
-    <div class="header">
-      <div class="header-container">
-        <router-link to="/main" class="logo">Transport application</router-link>
-        <nav class="nav">
-          <router-link v-if="userRole === 'ADMIN'" to="/orders">Order</router-link>
-          <router-link v-if="userRole === 'ADMIN'" to="/worker-list">Transport worker</router-link>
-          <router-link v-if="userRole === 'ADMIN'" to="/user-list">User</router-link>
-          <router-link v-if="userRole === 'ADMIN'" to="/create-user">Create User</router-link>
-  
-          <router-link v-if="userRole === 'USER'" to="/create-order">Create Order</router-link>
-          <router-link v-if="userRole === 'USER' || userRole === 'WORKER'" to="/orders">My Order</router-link>
-        </nav>
-      </div>
-      <div class="profile" ref="profileContainer">
-        <img
-            src="https://via.placeholder.com/40"
-            alt="Profile"
-            class="profile-image"
-            @click="toggleProfileMenu"
-        />
-        <div v-if="showProfileMenu" class="profile-menu">
-          <a href="#" @click.prevent="editProfile">Edit Profile</a>
-          <a href="#" @click.prevent="contact">Contact</a>
-          <div class="menu-divider"></div>
-          <a href="#" @click.prevent="logout" class="logout-link">Logout</a>
-        </div>
+  <div class="header">
+    <div class="header-container">
+      <router-link to="/main" class="logo">Transport application</router-link>
+      <nav class="nav">
+        <router-link v-if="userRole === 'ADMIN'" to="/orders">Order</router-link>
+        <router-link v-if="userRole === 'ADMIN'" to="/worker-list">Transport worker</router-link>
+        <router-link v-if="userRole === 'ADMIN'" to="/user-list">User</router-link>
+        <router-link v-if="userRole === 'ADMIN'" to="/create-user">Create User</router-link>
+
+        <router-link v-if="userRole === 'USER'" to="/create-order">Create Order</router-link>
+        <router-link v-if="userRole === 'USER' || userRole === 'WORKER'" to="/orders">My Order</router-link>
+      </nav>
+    </div>
+    <div class="profile" ref="profileContainer">
+      <img
+          :src="`http://localhost:8080${profile.profilePicture}`"
+          alt="Profile"
+          class="profile-image"
+          @click="toggleProfileMenu"
+      />
+      <div v-if="showProfileMenu" class="profile-menu">
+        <a href="#" @click.prevent="editProfile">Edit Profile</a>
+        <a href="#" @click.prevent="contact">Contact</a>
+        <div class="menu-divider"></div>
+        <a href="#" @click.prevent="logout" class="logout-link">Logout</a>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
 <script>
 import { mapGetters } from "vuex";
+import axios from "axios";
 
 export default {
   name: "Header",
   data() {
     return {
-      showProfileMenu: false
+      showProfileMenu: false,
+      profile: {
+        profilePicture: ""
+      },
     };
   },
   computed: {
-    ...mapGetters(["userRole"]),
+    ...mapGetters(["userRole", "id"]),
+  },
+  created() {
+    if (this.id) {
+      if (this.userRole === "WORKER") {
+        this.fetchWorkerProfile();
+      } else if (this.userRole === "USER" || this.userRole === "ADMIN") {
+        this.fetchUserProfile();
+      }
+    }
   },
   methods: {
     toggleProfileMenu() {
@@ -55,6 +68,22 @@ export default {
       if (!this.$refs.profileContainer?.contains(event.target)) {
         this.showProfileMenu = false;
         document.removeEventListener('click', this.handleClickOutside);
+      }
+    },
+    async fetchUserProfile() {
+      try {
+        const response = await axios.get(`http://localhost:8080/users/${this.id}`);
+        this.profile = {...response.data};
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    },
+    async fetchWorkerProfile() {
+      try {
+        const response = await axios.get(`http://localhost:8080/transportation-workers/${this.id}`);
+        this.profile = {...response.data};
+      } catch (error) {
+        console.error("Error fetching worker profile:", error);
       }
     },
     editProfile() {
@@ -113,21 +142,19 @@ export default {
   background-color: #f5f5f5;
 }
 
-/* สไตล์เส้นคั่น */
 .menu-divider {
   height: 1px;
   background-color: #e0e0e0;
-  margin: 8px 0; /* เว้นระยะห่างด้านบนและล่าง */
+  margin: 8px 0;
 }
 
-/* สไตล์เฉพาะสำหรับ Logout */
 .logout-link {
-  margin-top: 8px; /* เว้นระยะห่างด้านบน */
-  color: #ff4444; /* สีแดงเพื่อให้ดูโดดเด่น */
+  margin-top: 8px;
+  color: #ff4444;
 }
 
 .logout-link:hover {
-  background-color: #ffe5e5; /* สีพื้นหลังเมื่อ hover */
+  background-color: #ffe5e5;
 }
 
 .header {
@@ -174,27 +201,9 @@ export default {
 }
 
 .profile-image {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-}
-
-.picture-preview {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.picture-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* ทำให้รูปอยู่ในกรอบ */
-  border-radius: 50%; /* ทำให้รูปภาพเป็นวงกลม */
+  object-fit: cover;
 }
 </style>

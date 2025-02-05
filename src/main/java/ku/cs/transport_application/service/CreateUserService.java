@@ -27,6 +27,7 @@ public class CreateUserService {
     public void createUser(CreateUserRequest user) {
         User record = modelMapper.map(user, User.class);
 
+        record.setProfilePicture("/images/default-profile.png");
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         record.setPassword(hashedPassword);
 

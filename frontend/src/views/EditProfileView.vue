@@ -7,10 +7,9 @@
         <h2>Edit Profile</h2>
 
         <form @submit.prevent="updateProfile">
-          <!-- รูปโปรไฟล์ -->
           <div class="profile-picture-section">
             <div class="picture-preview">
-              <img :src="profilePictureUrl" alt="Profile Picture" />
+              <img :src="profilePictureUrl" alt="Profile Picture"/>
             </div>
             <input
                 type="file"
@@ -22,7 +21,6 @@
             <label for="profilePicture" class="btn-upload">Change Photo</label>
           </div>
 
-          <!-- ฟิลด์ข้อมูลส่วนตัว -->
           <div class="form-group">
             <label for="name">Name</label>
             <input
@@ -52,10 +50,10 @@
                 id="phoneNumber"
                 v-model="profile.phoneNumber"
                 placeholder="Enter your phone number"
+                required
             />
           </div>
 
-          <!-- ปุ่ม Save -->
           <div class="button-group">
             <button type="submit" class="btn btn-primary">Save</button>
           </div>
@@ -81,8 +79,9 @@ export default {
         name: "",
         email: "",
         phoneNumber: "",
+        profilePicture: ""
       },
-      profilePictureUrl: "/default-profile.png", // ใช้ไฟล์ static ไม่ใช้ require()
+      profilePictureUrl: "/default-profile.png",
       selectedProfilePicture: null,
     };
   },
@@ -93,38 +92,54 @@ export default {
     if (this.id) {
       if (this.userRole === "WORKER") {
         this.fetchWorkerProfile();
-      } else {
+      } else if (this.userRole === "USER" || this.userRole === "ADMIN") {
         this.fetchOwnProfile();
       }
     }
   },
   methods: {
     validateForm() {
-      if (!this.profile.name.trim()) {
-        alert("Please enter your name");
+
+      const namePattern = /^[a-zA-Z\s]+$/;
+      if (!namePattern.test(this.profile.name)) {
+        alert("Name can only contain letters and spaces");
         return false;
       }
+
       const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
       if (!emailPattern.test(this.profile.email)) {
         alert("Please enter a valid email");
         return false;
       }
+
+      const phonePattern = /^[0-9]{10}$/;
+      if (this.profile.phoneNumber && !phonePattern.test(this.profile.phoneNumber)) {
+        alert("Phone number must be exactly 10 digits");
+        return false;
+      }
+
       return true;
     },
     async fetchOwnProfile() {
       try {
-        const response = await axios.get(`http://localhost:8080/users/profile-picture/${this.id}`);
+        const response = await axios.get(`http://localhost:8080/users/${this.id}`);
         this.profile = { ...response.data };
-        this.profilePictureUrl = response.data.profilePicture || "/default-profile.png";
+        console.log(this.profile.profilePicture);
+        this.profilePictureUrl = this.profile.profilePicture
+            ? `http://localhost:8080${this.profile.profilePicture}`
+            : "/default-profile.png";
       } catch (error) {
         console.error("Error fetching own profile:", error);
       }
     },
     async fetchWorkerProfile() {
       try {
-        const response = await axios.get(`http://localhost:8080/transportation-workers/profile-picture/${this.id}`);
+        const response = await axios.get(`http://localhost:8080/transportation-workers/${this.id}`);
         this.profile = { ...response.data };
-        this.profilePictureUrl = response.data.profilePicture || "/default-profile.png";
+        console.log(this.profile.profilePicture);
+        this.profilePictureUrl = this.profile.profilePicture
+            ? `http://localhost:8080${this.profile.profilePicture}`
+            : "/default-profile.png";
       } catch (error) {
         console.error("Error fetching worker profile:", error);
       }
@@ -206,7 +221,6 @@ h2 {
   margin: 0 auto;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid #ddd;
   display: flex;
   align-items: center;
   justify-content: center;

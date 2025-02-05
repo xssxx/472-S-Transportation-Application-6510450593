@@ -103,22 +103,23 @@ public class FileService {
         String fileExtension = fileName.substring(fileName.lastIndexOf("."));
         newFileName = UUID.randomUUID() + fileExtension;
 
-        // บันทึกไฟล์
         Path path = Paths.get(uploadDir, newFileName);
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
-        // อัปเดตข้อมูลตาม role
+        String fileUrl = "/images/" + entityName + "/" + newFileName;
+
         if (role == UserRole.WORKER) {
             TransportationWorker worker = transportationWorkerRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Worker not found"));
-            worker.setProfilePicture("/images/" + entityName + "/" + newFileName);
+            worker.setProfilePicture(fileUrl);
             transportationWorkerRepository.save(worker);
         } else {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));
-            user.setProfilePicture("/images/" + entityName + "/" + newFileName);
+            user.setProfilePicture(fileUrl);
             userRepository.save(user);
         }
     }
+
 
 }

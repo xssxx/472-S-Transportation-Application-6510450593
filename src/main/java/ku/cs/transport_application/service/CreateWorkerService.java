@@ -32,6 +32,7 @@ public class CreateWorkerService {
 
         worker.setPhoneNumber(user.getPhoneNumber());
         worker.setEmail(user.getEmail());
+        worker.setProfilePicture("/images/default-profile.png");
         worker.setStatus(TransportationWorkerStatus.AVAILABLE);
 
         transportationWorkerRepository.save(worker);

@@ -43,20 +43,22 @@ public class TransportationWorkerService {
     }
 
     public TransportationWorkerDTO findWorkerByIdWithDTO(UUID workerId) {
-        transportationWorkerRepository.findById(workerId);
+        TransportationWorker record = transportationWorkerRepository.findById(workerId)
+                .orElseThrow(() -> new IllegalArgumentException("Worker not found"));
         TransportationWorkerDTO dto = new TransportationWorkerDTO();
         dto.setId(workerId);
-        dto.setUsername(findWorkerByUsername(workerId.toString()).getName());
-        dto.setName(findWorkerByUsername(workerId.toString()).getName());
-        dto.setPhoneNumber(findWorkerByUsername(workerId.toString()).getPhoneNumber());
-        dto.setEmail(findWorkerByUsername(workerId.toString()).getEmail());
-        dto.setProfilePicture(findWorkerByUsername(workerId.toString()).getProfilePicture());
-        dto.setStatus(findWorkerByUsername(workerId.toString()).getStatus());
+        dto.setUsername(record.getUsername());
+        dto.setName(record.getName());
+        dto.setPhoneNumber(record.getPhoneNumber());
+        dto.setEmail(record.getEmail());
+        dto.setProfilePicture(record.getProfilePicture());
+        dto.setStatus(record.getStatus());
         return dto;
     }
 
     public TransportationWorker findWorkerById(UUID workerId) {
-        return transportationWorkerRepository.findById(workerId);
+        return transportationWorkerRepository.findById(workerId)
+                .orElseThrow(() -> new IllegalArgumentException("Worker not found"));
     }
 
     public void setTransportationWorker(TransportationWorker worker) {
