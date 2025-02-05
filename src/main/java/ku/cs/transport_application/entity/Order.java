@@ -41,4 +41,5 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private List<OrderLine> orderLines = new ArrayList<>();
+
 }

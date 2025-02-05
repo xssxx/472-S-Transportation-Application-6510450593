@@ -15,6 +15,7 @@ import UserDetailView from "@/views/UserDetailView.vue";
 import CreateOrderView from "@/views/CreateOrderView.vue";
 import FailView from "@/views/FailView.vue";
 import SuccessView from "@/views/SuccessView.vue";
+import ReceiptView from "@/views/ReceiptView.vue";
 
 const routes = [
   {
@@ -105,6 +106,12 @@ const routes = [
     path: "/payment/success",
     name: "success",
     component: SuccessView,
+  },
+  {
+    path: "/receipt/:id",
+    name: "receipt",
+    component: ReceiptView,
+    meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER"] },
   },
   {
     path: "/payment/fail",

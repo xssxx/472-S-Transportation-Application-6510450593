@@ -20,4 +20,5 @@ public class OrderLine {
     @MapsId("productId")
     @JoinColumn(name = "product_id")
     private Product product;
+
 }

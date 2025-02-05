@@ -60,6 +60,12 @@ public class OrderService {
         return null;
     }
 
+    public Order getOrdersByOrderId(UUID id) {
+        Optional<Order> recordOptional = orderRepository.findById(id);
+        return recordOptional.orElse(null);
+    }
+
+
     public List<OrderDTO> getOrdersByWorker(UUID id) {
         Optional<TransportationWorker> recordOptional = twRepository.findById(id);
         if (recordOptional.isPresent()) {
@@ -278,4 +284,6 @@ public class OrderService {
             orderRepository.save(recordOrder);
         }
     }
+
+
 }

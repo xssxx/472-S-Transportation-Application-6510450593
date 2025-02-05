@@ -18,7 +18,7 @@ public class CreateOrderController {
     private CreateOrderService createOrderService;
 
     @PostMapping("/create-order")
-    public ResponseEntity<?> createOrder(@Valid @RequestBody OrderRequest request) throws StripeException {
+    public ResponseEntity<?> createOrder(@Valid @RequestBody OrderRequest request) throws Exception {
         createOrderService.createOrder(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("Order created successfully");
     }
