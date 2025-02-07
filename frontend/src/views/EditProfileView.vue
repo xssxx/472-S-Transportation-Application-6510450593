@@ -126,7 +126,7 @@ export default {
         this.profile = { ...response.data };
         console.log(this.profile.profilePicture);
         this.profilePictureUrl = this.profile.profilePicture
-            ? `http://localhost:8080${this.profile.profilePicture}`
+            ? `http://localhost:8080${this.profile.profilePicture}?t=${new Date().getTime()}`
             : "/default-profile.png";
       } catch (error) {
         console.error("Error fetching own profile:", error);
@@ -138,7 +138,7 @@ export default {
         this.profile = { ...response.data };
         console.log(this.profile.profilePicture);
         this.profilePictureUrl = this.profile.profilePicture
-            ? `http://localhost:8080${this.profile.profilePicture}`
+            ? `http://localhost:8080${this.profile.profilePicture}?t=${new Date().getTime()}`
             : "/default-profile.png";
       } catch (error) {
         console.error("Error fetching worker profile:", error);

@@ -95,10 +95,10 @@ public class FileService {
                 break;
         }
 
+        Files.createDirectories(Paths.get(uploadDir));
+
         String fileName = file.getOriginalFilename();
         assert fileName != null;
-
-        Files.createDirectories(Paths.get(uploadDir));
 
         String fileExtension = fileName.substring(fileName.lastIndexOf("."));
         newFileName = UUID.randomUUID() + fileExtension;
@@ -111,15 +111,33 @@ public class FileService {
         if (role == UserRole.WORKER) {
             TransportationWorker worker = transportationWorkerRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Worker not found"));
+
+            if (worker.getProfilePicture() != null && !worker.getProfilePicture().equals("/images/default-profile.png")) {
+                deleteFileIfExists("src/main/resources/static" + worker.getProfilePicture());
+            }
+
             worker.setProfilePicture(fileUrl);
             transportationWorkerRepository.save(worker);
         } else {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+            if (user.getProfilePicture() != null && !user.getProfilePicture().equals("/images/default-profile.png")) {
+                deleteFileIfExists("src/main/resources/static" + user.getProfilePicture());
+            }
+
             user.setProfilePicture(fileUrl);
             userRepository.save(user);
         }
     }
 
+    private void deleteFileIfExists(String filePath) {
+        File file = new File(filePath);
+        if (file.exists() && file.isFile()) {
+            if (!file.delete()) {
+                System.err.println("Warning: Failed to delete file " + filePath);
+            }
+        }
+    }
 
 }
