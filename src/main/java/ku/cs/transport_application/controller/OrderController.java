@@ -87,6 +87,12 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getComplete());
     }
 
+    @GetMapping("/orders/search")
+    public ResponseEntity <List<OrderDTO>> searchOrder(@RequestParam String keyword) {
+        List<OrderDTO> orders = orderService.searchOrders(keyword);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
     @PostMapping("/change-order-worker-status")
     public ResponseEntity<?> changeOrderAndWorkerStatus(@RequestParam("orderId") UUID orderId,
                                                @RequestParam("workerId") UUID workerId,
