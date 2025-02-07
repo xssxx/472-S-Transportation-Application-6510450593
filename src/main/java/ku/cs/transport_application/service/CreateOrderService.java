@@ -35,7 +35,10 @@ public class CreateOrderService {
     @Autowired
     private PaymentFactory paymentFactory;
 
-    public void createOrder(OrderRequest request) throws StripeException {
+    @Autowired
+    private ReceiptService receiptService;
+
+    public void createOrder(OrderRequest request) throws Exception {
         Order order = new Order();
         order.setCustomerName(request.getCustomerName());
         order.setCustomerAddress(request.getCustomerAddress());
@@ -84,6 +87,9 @@ public class CreateOrderService {
 
         // อัพเดตข้อมูล order ที่มี payment link
         orderRepository.save(order);
+
+        //สร้างใบเสร็จหลังจากชำระเงินแล้ว
+        receiptService.createReceipt(order.getId());
     }
 
 }
