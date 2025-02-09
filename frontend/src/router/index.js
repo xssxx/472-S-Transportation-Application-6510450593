@@ -106,6 +106,7 @@ const routes = [
     path: "/payment/success",
     name: "success",
     component: SuccessView,
+    meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
   },
   {
     path: "/receipt/:id",
@@ -117,6 +118,13 @@ const routes = [
     path: "/payment/fail",
     name: "fail",
     component: FailView,
+    meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
+  },
+  {
+    path: "/payment/history",
+    name: "history",
+    component: () => import("@/views/HistoryView.vue"),
+    meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
   },
   {
     path: "/edit-profile",
@@ -124,7 +132,6 @@ const routes = [
     component: () => import("@/views/EditProfileView.vue"),
     meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
   },
-
 ];
 
 const router = createRouter({

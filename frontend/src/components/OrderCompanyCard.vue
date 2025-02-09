@@ -6,13 +6,22 @@
     <p class="due-date">Date: {{ formattedDate(date) }}</p>
     <p>Total: {{ total }}</p>
     <button class="details-button" @click="viewDetails">Details</button>
-    <button class="details-button" @click="payment">Pay</button>
-    <button v-if="status === 'delivered'" class="bill-button">Bill</button>
+    <button v-if="status === `UNPAID`" class="details-button" @click="payment">
+      Pay
+    </button>
+    <button
+      v-if="status === 'DELIVERED'"
+      class="bill-button"
+      @click="goToReceipt"
+    >
+      Bill
+    </button>
   </div>
 </template>
 
 <script>
 import dayjs from "dayjs";
+import router from "@/router";
 
 export default {
   name: "OrderCompanyCard",
@@ -55,6 +64,9 @@ export default {
     },
     payment() {
       window.open(this.paymentLink);
+    },
+    goToReceipt() {
+      router.push(`/receipt/${this.orderId}`);
     },
   },
   computed: {

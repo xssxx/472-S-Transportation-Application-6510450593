@@ -3,6 +3,7 @@
 import axios from "axios";
 import { onMounted } from "vue";
 import { useRoute } from "vue-router";
+import Header from "@/components/Header.vue";
 
 const route = useRoute();
 
@@ -31,6 +32,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <Header />
   <div class="container">
     <main class="main-content">
       <div class="order-details">
@@ -66,7 +68,7 @@ onMounted(async () => {
   flex-direction: column;
   gap: 1.5rem;
   background-color: #f7fafc;
-  height: 100vh;
+  min-height: calc(100vh - 62px);
   align-items: center;
   justify-content: center;
 }

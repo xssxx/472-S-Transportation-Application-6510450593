@@ -1,4 +1,5 @@
 <template>
+  <Header />
   <div class="container">
     <main class="main-content">
       <div class="order-details">
@@ -15,6 +16,10 @@
   </div>
 </template>
 
+<script setup>
+import Header from "@/components/Header.vue";
+</script>
+
 <style scoped>
 .container {
   display: flex;
@@ -28,7 +33,7 @@
   gap: 1.5rem;
   background-color: #f7fafc;
   height: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 62px);
   align-items: center;
   justify-content: center;
 }
