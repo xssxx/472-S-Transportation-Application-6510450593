@@ -9,14 +9,14 @@
         <form @submit.prevent="updateProfile">
           <div class="profile-picture-section">
             <div class="picture-preview">
-              <img :src="profilePictureUrl" alt="Profile Picture"/>
+              <img :src="profilePictureUrl" alt="Profile Picture" />
             </div>
             <input
-                type="file"
-                id="profilePicture"
-                accept="image/*"
-                @change="onFileChange"
-                hidden
+              type="file"
+              id="profilePicture"
+              accept="image/*"
+              @change="onFileChange"
+              hidden
             />
             <label for="profilePicture" class="btn-upload">Change Photo</label>
           </div>
@@ -24,33 +24,33 @@
           <div class="form-group">
             <label for="name">Name</label>
             <input
-                type="text"
-                id="name"
-                v-model="profile.name"
-                placeholder="Enter your name"
-                required
+              type="text"
+              id="name"
+              v-model="profile.name"
+              placeholder="Enter your name"
+              required
             />
           </div>
 
           <div class="form-group">
             <label for="email">Email</label>
             <input
-                type="email"
-                id="email"
-                v-model="profile.email"
-                placeholder="Enter your email"
-                required
+              type="email"
+              id="email"
+              v-model="profile.email"
+              placeholder="Enter your email"
+              required
             />
           </div>
 
           <div class="form-group">
             <label for="phoneNumber">Phone Number</label>
             <input
-                type="text"
-                id="phoneNumber"
-                v-model="profile.phoneNumber"
-                placeholder="Enter your phone number"
-                required
+              type="text"
+              id="phoneNumber"
+              v-model="profile.phoneNumber"
+              placeholder="Enter your phone number"
+              required
             />
           </div>
 
@@ -79,7 +79,7 @@ export default {
         name: "",
         email: "",
         phoneNumber: "",
-        profilePicture: ""
+        profilePicture: "",
       },
       profilePictureUrl: "/default-profile.png",
       selectedProfilePicture: null,
@@ -99,7 +99,6 @@ export default {
   },
   methods: {
     validateForm() {
-
       const namePattern = /^[a-zA-Z\s]+$/;
       if (!namePattern.test(this.profile.name)) {
         alert("Name can only contain letters and spaces");
@@ -113,7 +112,10 @@ export default {
       }
 
       const phonePattern = /^[0-9]{10}$/;
-      if (this.profile.phoneNumber && !phonePattern.test(this.profile.phoneNumber)) {
+      if (
+        this.profile.phoneNumber &&
+        !phonePattern.test(this.profile.phoneNumber)
+      ) {
         alert("Phone number must be exactly 10 digits");
         return false;
       }
@@ -122,24 +124,32 @@ export default {
     },
     async fetchOwnProfile() {
       try {
-        const response = await axios.get(`http://localhost:8080/users/${this.id}`);
+        const response = await axios.get(
+          `http://localhost:8080/users/${this.id}`
+        );
         this.profile = { ...response.data };
         console.log(this.profile.profilePicture);
         this.profilePictureUrl = this.profile.profilePicture
-            ? `http://localhost:8080${this.profile.profilePicture}?t=${new Date().getTime()}`
-            : "/default-profile.png";
+          ? `http://localhost:8080${
+              this.profile.profilePicture
+            }?t=${new Date().getTime()}`
+          : "/default-profile.png";
       } catch (error) {
         console.error("Error fetching own profile:", error);
       }
     },
     async fetchWorkerProfile() {
       try {
-        const response = await axios.get(`http://localhost:8080/transportation-workers/${this.id}`);
+        const response = await axios.get(
+          `http://localhost:8080/transportation-workers/${this.id}`
+        );
         this.profile = { ...response.data };
         console.log(this.profile.profilePicture);
         this.profilePictureUrl = this.profile.profilePicture
-            ? `http://localhost:8080${this.profile.profilePicture}?t=${new Date().getTime()}`
-            : "/default-profile.png";
+          ? `http://localhost:8080${
+              this.profile.profilePicture
+            }?t=${new Date().getTime()}`
+          : "/default-profile.png";
       } catch (error) {
         console.error("Error fetching worker profile:", error);
       }
@@ -164,9 +174,9 @@ export default {
         }
 
         const url =
-            this.userRole === "WORKER"
-                ? `http://localhost:8080/transportation-workers/update-profile/${this.id}`
-                : `http://localhost:8080/users/update-profile/${this.id}`;
+          this.userRole === "WORKER"
+            ? `http://localhost:8080/transportation-workers/update-profile/${this.id}`
+            : `http://localhost:8080/users/update-profile/${this.id}`;
 
         await axios.put(url, formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -182,7 +192,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .edit-profile-page {

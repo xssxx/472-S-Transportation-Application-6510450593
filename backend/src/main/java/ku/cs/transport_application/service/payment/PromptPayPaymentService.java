@@ -9,23 +9,25 @@ import ku.cs.transport_application.entity.Order;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@Service("creditCardService")
-public class CreditCardPaymentService implements PaymentService {
+@Service("promptPayService")
+public class PromptPayPaymentService implements PaymentService {
 
     @Value("${stripe.api.key.test}")
     private String stripeSecretKey;
 
     @Override
     public PaymentResponse createPaymentLink(Order order) throws StripeException {
+        if (order == null || order.getTotal() <= 0) {
+            throw new IllegalArgumentException("Order must not be null and total must be greater than zero.");
+        }
+
         Stripe.apiKey = stripeSecretKey;
 
-        if (order == null || order.getTotal() <= 0)
-            throw new IllegalArgumentException("Invalid order: Order must not be null and total must be greater than zero.");
 
         double total = order.getTotal() * 100;
 
         SessionCreateParams params = SessionCreateParams.builder()
-                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.PROMPTPAY)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl("http://localhost:5173/payment/success?id=" + order.getId())
                 .setCancelUrl("http://localhost:5173/payment/fail")

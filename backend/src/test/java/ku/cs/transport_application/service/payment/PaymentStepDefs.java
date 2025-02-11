@@ -1,4 +1,4 @@
-package ku.cs.transport_application.service;
+package ku.cs.transport_application.service.payment;
 
 import com.stripe.exception.StripeException;
 import io.cucumber.java.Before;
@@ -10,8 +10,6 @@ import static org.mockito.Mockito.*;
 
 import ku.cs.transport_application.entity.Order;
 import ku.cs.transport_application.DTO.PaymentResponse;
-import ku.cs.transport_application.service.payment.CreditCardPaymentService;
-import ku.cs.transport_application.service.payment.PromptPayPaymentService;
 import java.util.UUID;
 
 public class PaymentStepDefs {
@@ -88,7 +86,6 @@ public class PaymentStepDefs {
     @Then("it should throw an IllegalArgumentException")
     public void itShouldThrowAnIllegalArgumentException() {
         assertNotNull(exception, "Expected an exception, but got null.");
-        assertTrue(exception instanceof IllegalArgumentException,
-                "Expected IllegalArgumentException, but got " + exception.getClass());
+        assertInstanceOf(IllegalArgumentException.class, exception, "Expected IllegalArgumentException, but got " + exception.getClass());
     }
 }
