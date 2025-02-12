@@ -6,7 +6,7 @@
 - 6510450763 ภัควัฒน์ ปานกลาง
 - 6510450593 ปริยวิศว์ เตชะกฤตเมธีธำรง
 
-## Installation (Manual)
+## Installation
 
 1. **Clone repository**: `git clone https://github.com/se-jang/transport-application.git`
 2. **Backend Setup**:
@@ -20,10 +20,6 @@
 - เข้าไปที่โฟลเดอร์ frontend: `cd frontend`
 - ติดตั้ง dependencies: `npm install`
 - รัน application: `npm run dev`
-
-## Installation (Docker)
-
-- `docker-compose up -d`
 
 ## Configuration
 

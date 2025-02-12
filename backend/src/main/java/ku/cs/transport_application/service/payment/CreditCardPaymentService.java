@@ -41,7 +41,13 @@ public class CreditCardPaymentService implements PaymentService {
                                         .build())
                                 .build())
                         .build())
+                .setPaymentIntentData(
+                        SessionCreateParams.PaymentIntentData.builder()
+                                .putMetadata("order_id", order.getId().toString())
+                                .build()
+                )
                 .build();
+
 
         Session session = Session.create(params);
 

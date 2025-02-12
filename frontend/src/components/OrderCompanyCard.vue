@@ -6,7 +6,7 @@
     <p class="due-date">Date: {{ formattedDate(date) }}</p>
     <p>Total: {{ total }}</p>
     <button class="details-button" @click="viewDetails">Details</button>
-    <button v-if="status === `UNPAID`" class="details-button" @click="payment">
+    <button class="pay-button" v-if="status === `UNPAID`" @click="payment">
       Pay
     </button>
     <button
@@ -72,6 +72,8 @@ export default {
   computed: {
     statusClass() {
       switch (this.status) {
+        case "UNPAID":
+          return "status-unpaid";
         case "UNCHECK":
           return "status-uncheck";
         case "CHECKED":
@@ -94,6 +96,7 @@ export default {
 
 <style scoped>
 .order-card {
+  font-family: "Inter", sans-serif;
   position: relative;
   background-color: white;
   padding: 20px;
@@ -106,7 +109,6 @@ export default {
 .due-date,
 .customer-name,
 .customer-address {
-  font-family: "Inter", sans-serif;
   margin: 0;
   margin-bottom: 10px;
 }
@@ -114,7 +116,6 @@ export default {
 .details-button,
 .bill-button {
   padding: 5px 10px;
-  font-family: "Inter", sans-serif;
   background-color: gray;
   color: white;
   border: none;
@@ -122,6 +123,16 @@ export default {
   cursor: pointer;
   width: auto;
   margin-right: 10px;
+}
+
+.pay-button {
+  padding: 5px 2rem;
+  background-color: rgb(103, 181, 112);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: auto;
 }
 
 .status-indicator {
@@ -135,33 +146,31 @@ export default {
   border-radius: 5px;
 }
 
+.status-unpaid {
+  background-color: rgb(216, 78, 78);
+}
+
 .status-uncheck {
-  font-family: "Inter", sans-serif;
   background-color: #d3d3d3;
 }
 
 .status-checked {
-  font-family: "Inter", sans-serif;
   background-color: #1e90ff;
 }
 
 .status-ongoing {
-  font-family: "Inter", sans-serif;
   background-color: #ffa500;
 }
 
 .status-delivered {
-  font-family: "Inter", sans-serif;
   background-color: #32cd32;
 }
 
 .status-uploaded {
-  font-family: "Inter", sans-serif;
   background-color: #8a2be2;
 }
 
 .status-completed {
-  font-family: "Inter", sans-serif;
   background-color: #00289e;
 }
 </style>

@@ -203,4 +203,17 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+DROP TABLE IF EXIST `history`;
+
+CREATE TABLE history (
+    history_id VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    amount double CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    payment_date datetime(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    order_id VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+
+    PRIMARY KEY (history_id),
+    CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES orders(id)
+);
+
 -- Dump completed on 2025-02-11 15:40:39
+

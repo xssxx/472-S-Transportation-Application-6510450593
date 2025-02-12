@@ -1,10 +1,10 @@
 <script setup>
-// import router from "@/router";
 import axios from "axios";
 import { onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Header from "@/components/Header.vue";
 
+const router = useRouter();
 const route = useRoute();
 
 onMounted(async () => {
@@ -14,7 +14,6 @@ onMounted(async () => {
       const res = await axios.post(
         `http://localhost:8080/orders/order-detail/${orderId}/change-status?status=UNCHECK`
       );
-      // const res2 = await axios.post()
       console.log(res.data);
     } catch (error) {
       console.error(
@@ -27,9 +26,9 @@ onMounted(async () => {
   }
 });
 
-// const goToReceipt = () => {
-//   router.push(`/receipt/${route.query.id}`);
-// };
+const goToReceipt = () => {
+  router.push(`/receipt/${route.query.id}`);
+};
 </script>
 
 <template>

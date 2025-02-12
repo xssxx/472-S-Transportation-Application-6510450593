@@ -7,9 +7,9 @@ public class CalculatePriceService {
         int shippingCostPerItem = switch (productType) {
             case LIGHTWEIGHT -> 50;
             case HEAVYWEIGHT -> 150;
-            case FRAGILE -> 100;        // ราคาขนส่งสำหรับสินค้าประเภทเปราะบาง
-            case HAZARDOUS -> 200;      // ราคาขนส่งสำหรับสินค้าประเภทอันตราย
-            case SPECIALTY -> 300;      // ราคาขนส่งสำหรับสินค้าประเภทพิเศษ
+            case FRAGILE -> 100;
+            case HAZARDOUS -> 200;
+            case SPECIALTY -> 300;
             default -> throw new IllegalArgumentException("Unknown product type: " + productType);
         };
 
