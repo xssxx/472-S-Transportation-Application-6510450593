@@ -17,6 +17,10 @@ public class HistoryController {
 
     private final HistoryService historyService;
 
+    /*
+     * TODO: response DTO
+     */
+
     @GetMapping("/payments")
     public ResponseEntity<List<History>> getPayments() {
         List<History> histories = historyService.getHistories();
