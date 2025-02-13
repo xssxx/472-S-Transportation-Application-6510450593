@@ -2,6 +2,7 @@ package ku.cs.transport_application.controller;
 
 import ku.cs.transport_application.entity.History;
 import ku.cs.transport_application.request.AddHistoryRequest;
+import ku.cs.transport_application.response.HistoryResponse;
 import ku.cs.transport_application.service.payment.HistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -22,8 +24,8 @@ public class HistoryController {
      */
 
     @GetMapping("/payments")
-    public ResponseEntity<List<History>> getPayments() {
-        List<History> histories = historyService.getHistories();
+    public ResponseEntity<List<HistoryResponse>> getPayments() {
+        List<HistoryResponse> histories = historyService.getHistories();
 
         if (histories.isEmpty())
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -32,8 +34,8 @@ public class HistoryController {
     }
 
     @GetMapping("/payments/{id}")
-    public ResponseEntity<List<History>> getPayment(@PathVariable UUID id) {
-        List<History> histories = historyService.getHistoriesByUserId(id);
+    public ResponseEntity<List<HistoryResponse>> getPayment(@PathVariable UUID id) {
+        List<HistoryResponse> histories = historyService.getHistoriesByUserId(id);
 
         if (histories.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -42,10 +44,10 @@ public class HistoryController {
     }
 
     @PostMapping("/payments")
-    public ResponseEntity<History> addPayment(@RequestBody AddHistoryRequest r) {
-        History createdHistory = historyService.addHistoryByOrderId(r.getOrderId());
+    public ResponseEntity<Optional<HistoryResponse>> addPayment(@RequestBody AddHistoryRequest r) {
+        Optional<HistoryResponse> createdHistory = historyService.addHistoryByOrderId(r.getOrderId());
 
-        if (createdHistory == null)
+        if (createdHistory.isEmpty())
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdHistory);

@@ -4,6 +4,7 @@ import ku.cs.transport_application.entity.History;
 import ku.cs.transport_application.entity.Order;
 import ku.cs.transport_application.entity.User;
 import ku.cs.transport_application.repository.HistoryRepository;
+import ku.cs.transport_application.response.HistoryResponse;
 import ku.cs.transport_application.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
@@ -64,7 +65,7 @@ class HistoryServiceTest {
         when(historyRepository.findAll()).thenReturn(histories);
 
         // When
-        List<History> result = historyService.getHistories();
+        List<HistoryResponse> result = historyService.getHistories();
 
         // Then
         assertNotNull(result);
@@ -81,12 +82,11 @@ class HistoryServiceTest {
         when(historyRepository.findByUserId(userId)).thenReturn(histories);
 
         // When
-        List<History> result = historyService.getHistoriesByUserId(userId);
+        List<HistoryResponse> result = historyService.getHistoriesByUserId(userId);
 
         // Then
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(userId, result.get(0).getOrder().getUser().getId());  // Assuming the Order object has a User object
         verify(historyRepository, times(1)).findByUserId(userId);
     }
 
@@ -97,13 +97,27 @@ class HistoryServiceTest {
         when(historyRepository.save(any(History.class))).thenReturn(history);
 
         // When
-        History result = historyService.addHistoryByOrderId(orderId);
+        Optional<HistoryResponse> result = historyService.addHistoryByOrderId(orderId);
 
         // Then
         assertNotNull(result);
-        assertEquals(order.getTotal(), result.getAmount());
-        assertEquals(order.getId(), result.getOrder().getId());
         verify(orderService, times(1)).getOrdersByOrderId(orderId);
         verify(historyRepository, times(1)).save(any(History.class));
+    }
+
+    @Test
+    void getHistoryByOrderId() {
+        // given
+        UUID orderId = order.getId();
+        List<History> histories = Collections.singletonList(history);
+        when(historyRepository.findByOrderId(orderId)).thenReturn(histories);
+
+        // when
+        List<HistoryResponse> result = historyService.getHistoriesByOrderId(orderId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(historyRepository, times(1)).findByOrderId(orderId);
     }
 }

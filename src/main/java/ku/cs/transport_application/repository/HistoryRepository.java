@@ -18,4 +18,6 @@ public interface HistoryRepository extends JpaRepository<History, UUID> {
      */
     @Query("SELECT h FROM History h JOIN h.order o JOIN o.user u WHERE u.id = :userId")
     List<History> findByUserId(@Param("userId") UUID userId);
+
+    List<History> findByOrderId(UUID orderId);
 }
