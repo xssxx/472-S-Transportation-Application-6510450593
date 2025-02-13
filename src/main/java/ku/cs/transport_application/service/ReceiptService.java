@@ -60,8 +60,8 @@ public class ReceiptService {
                 order.getStatus(),                      // สถานะสินค้า
                 order.getCustomerName(),                // ชื่อร้านค้า
                 order.getCustomerAddress(),             // ที่อยู่ผู้รับ
-                order.getWorker().getName(),            // ชื่อผู้ส่ง
-                order.getWorker().getPhoneNumber(),     // เบอร์ผู้ส่ง
+                order.getWorker().getName()  ,          // ชื่อผู้ส่ง
+                order.getWorker().getPhoneNumber() ,    // เบอร์ผู้ส่ง
                 order.getWorker().getEmail(),           // เมลผู้ส่ง
                 order.getUser().getName(),              // ชื่อผู้รับ
                 productResponses                        // list of product

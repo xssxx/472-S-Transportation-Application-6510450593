@@ -4,7 +4,6 @@ import axios from 'axios'
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-const router = useRouter()
 const route = useRoute()
 
 const updateOrderStatus = async (orderId: string) => {
@@ -17,10 +16,6 @@ const addHistory = async (orderId: string) => {
     return await axios.post(`http://localhost:8080/payments`, {
         orderId: orderId,
     })
-}
-
-const goToReceipt = () => {
-    router.push(`/receipt/${route.query.id}`)
 }
 
 onMounted(async () => {
@@ -63,9 +58,6 @@ onMounted(async () => {
                     Thank you for your payment! Your order has been completed
                     successfully.
                 </p>
-                <button @click="goToReceipt" class="receipt-button">
-                    Check your receipt!
-                </button>
             </div>
         </main>
     </div>
