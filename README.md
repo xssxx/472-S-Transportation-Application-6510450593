@@ -4,17 +4,22 @@
 
 - 6510450607 ปริยานุช มั่งคั่ง
 - 6510450763 ภัควัฒน์ ปานกลาง
+- 6510450593 ปริยวิศว์ เตชะกฤตเมธีธำรง
 
 ## Installation
 
 1. **Clone repository**: `git clone https://github.com/se-jang/transport-application.git`
 2. **Backend Setup**:
-   - ติดตั้ง dependencies: `mvn install`
-   - รัน Spring Boot application: `mvn spring-boot:run`
+
+- เข้าไปที่โฟลเดอร์ frontend: `cd backend`
+- ติดตั้ง dependencies: `mvn install`
+- รัน Spring Boot application: `mvn spring-boot:run`
+
 3. **Frontend Setup**:
-   - เข้าไปที่โฟลเดอร์ frontend: `cd frontend`
-   - ติดตั้ง dependencies: `npm install`
-   - รัน application: `npm run dev`
+
+- เข้าไปที่โฟลเดอร์ frontend: `cd frontend`
+- ติดตั้ง dependencies: `npm install`
+- รัน application: `npm run dev`
 
 ## Configuration
 

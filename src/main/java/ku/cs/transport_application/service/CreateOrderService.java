@@ -1,6 +1,5 @@
 package ku.cs.transport_application.service;
 
-import com.stripe.exception.StripeException;
 import ku.cs.transport_application.DTO.PaymentResponse;
 import ku.cs.transport_application.common.OrderStatus;
 import ku.cs.transport_application.entity.*;
@@ -13,30 +12,20 @@ import ku.cs.transport_application.request.ProductDetailRequest;
 import ku.cs.transport_application.service.payment.CalculatePriceService;
 import ku.cs.transport_application.service.payment.PaymentFactory;
 import ku.cs.transport_application.service.payment.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class CreateOrderService {
-
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private OrderLineRepository orderLineRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private PaymentFactory paymentFactory;
-
-    @Autowired
-    private ReceiptService receiptService;
+    private final OrderRepository orderRepository;
+    private final OrderLineRepository orderLineRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final PaymentFactory paymentFactory;
+    private final ReceiptService receiptService;
 
     public void createOrder(OrderRequest request) throws Exception {
         Order order = new Order();

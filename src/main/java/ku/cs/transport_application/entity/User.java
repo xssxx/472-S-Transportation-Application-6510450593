@@ -25,5 +25,4 @@ public class User {
     private String email;
     private String profilePicture;
     private UserRole role;
-
 }
