@@ -14,6 +14,22 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Dumping structure for table transport_application.history
+CREATE TABLE IF NOT EXISTS `history` (
+  `history_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `amount` double NOT NULL,
+  `payment_date` datetime(6) DEFAULT NULL,
+  `order_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`history_id`),
+  UNIQUE KEY `UKorvr1b42qqxyl8v4rixyii9ma` (`order_id`),
+  CONSTRAINT `FKloisvnff08fitcwktyqgbcx4d` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table transport_application.history: ~0 rows (approximately)
+DELETE FROM `history`;
+INSERT INTO `history` (`history_id`, `amount`, `payment_date`, `order_id`) VALUES
+	('292f8215-2410-41c5-8a2c-c45ca59b790e', 1000, '2025-02-13 13:12:10.822939', 'cf005636-eace-4f20-928e-17396cf46177');
+
 -- Dumping structure for table transport_application.orders
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
@@ -34,12 +50,11 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `FKel9kyl84ego2otj2accfd8mr7` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table transport_application.orders: ~4 rows (approximately)
+-- Dumping data for table transport_application.orders: ~0 rows (approximately)
+DELETE FROM `orders`;
 INSERT INTO `orders` (`id`, `customer_address`, `customer_name`, `date`, `delivered_date`, `payment_link`, `shipment_doc_dir`, `status`, `total`, `user_id`, `worker_id`) VALUES
-	('06feadb3-4de0-46bb-b1f5-e05ef1d7836f', '911 World Trade Center', 'Pasin Salad', '2025-02-03 01:19:57.702140', NULL, 'https://checkout.stripe.com/c/pay/cs_test_a1m3lqZWguvnYZNXJHFFzIlNi51GGpWiPxMhdJMd4jgBdm52F2uzf6vta9#fidkdWxOYHwnPyd1blpxYHZxWjA0VGowTmExQktqMmNGPWdcUD1Ud2JkXzVPV309ME1sVWRqUXZLf0dEf3BvZjwxSVR9YDxxaDZgU29AcnJzUDxtcXVxPW1xNGBvUl9RM09DNFdLRmcyVUpmNTVzSzBXQTBIZCcpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl', NULL, 0, 150, 'f0d69852-3596-4b8d-a07b-5417742a31e2', NULL),
-	('342e4115-fb27-426f-97d5-f52c9a357898', '911 World Trade Center', 'Pasin Salad', '2025-02-03 01:04:40.960108', NULL, 'https://checkout.stripe.com/c/pay/cs_test_a1d1xcKbeHznkaGa0mXiwkfIx3LhGdDoiYAFWFcRAnTCW3KAu0XMBqOyEN#fidkdWxOYHwnPyd1blpxYHZxWjA0VGowTmExQktqMmNGPWdcUD1Ud2JkXzVPV309ME1sVWRqUXZLf0dEf3BvZjwxSVR9YDxxaDZgU29AcnJzUDxtcXVxPW1xNGBvUl9RM09DNFdLRmcyVUpmNTVzSzBXQTBIZCcpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl', 'src\\main\\resources\\static\\images\\uploads\\1738588399034_ICSE2024_Code_Suggestion.pdf', 6, 200, 'f0d69852-3596-4b8d-a07b-5417742a31e2', '21eabebf-c080-4572-a187-611fbb2c89ea'),
-	('665763ee-824f-4950-924d-f2ce71a79d1b', '911 World Trade Center', 'Koonx', '2025-02-03 19:56:34.641223', NULL, 'https://checkout.stripe.com/c/pay/cs_test_a1US2QDvI017of8Rzru0grmkvvQOyjJPeHFmeNNpAkp2GkzvheAHz1dYOx#fidkdWxOYHwnPyd1blpxYHZxWjA0VGowTmExQktqMmNGPWdcUD1Ud2JkXzVPV309ME1sVWRqUXZLf0dEf3BvZjwxSVR9YDxxaDZgU29AcnJzUDxtcXVxPW1xNGBvUl9RM09DNFdLRmcyVUpmNTVzSzBXQTBIZCcpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl', NULL, 0, 250, 'f0d69852-3596-4b8d-a07b-5417742a31e2', NULL),
-	('e0d13de2-ae61-4197-9bb8-5cb2ad43840e', '911 World Trade Center', 'BANANA', '2025-02-03 20:16:46.262356', NULL, 'https://checkout.stripe.com/c/pay/cs_test_a1kJUbaLXaKojaY48KB9qXxzC2PQ0habtsIhoK3DdMkEA9a0mWs0szrC39#fidkdWxOYHwnPyd1blpxYHZxWjA0VGowTmExQktqMmNGPWdcUD1Ud2JkXzVPV309ME1sVWRqUXZLf0dEf3BvZjwxSVR9YDxxaDZgU29AcnJzUDxtcXVxPW1xNGBvUl9RM09DNFdLRmcyVUpmNTVzSzBXQTBIZCcpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl', NULL, 4, 150, 'f0d69852-3596-4b8d-a07b-5417742a31e2', '21eabebf-c080-4572-a187-611fbb2c89ea');
+	('1e265109-7b9e-4d8f-a51f-47e7811f2f90', 'Bangkok ', 'Konvy', '2025-02-13 13:11:01.265726', NULL, 'https://checkout.stripe.com/c/pay/cs_test_a17RArBjc7WS6VDQodcdxYXcPt8hOfoTvOBZnlfsDqfnszT0qPQM5WCgrt#fidkdWxOYHwnPyd1blpxYHZxWjA0VGowTmExQktqMmNGPWdcUD1Ud2JkXzVPV309ME1sVWRqUXZLf0dEf3BvZjwxSVR9YDxxaDZgU29AcnJzUDxtcXVxPW1xNGBvUl9RM09DNFdLRmcyVUpmNTVzSzBXQTBIZCcpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl', NULL, 0, 1500, 'b34a5bc4-a803-4b7d-bc44-6084d3fed71d', NULL),
+	('cf005636-eace-4f20-928e-17396cf46177', 'Bangkok ', 'Konvy', '2025-02-13 13:11:41.558742', NULL, 'https://checkout.stripe.com/c/pay/cs_test_a15qMfMy3yboc1XVf1pz9txdMZPlEc188sXgjm9niYOsoYpXvZhzj66RSx#fidkdWxOYHwnPyd1blpxYHZxWjA0VGowTmExQktqMmNGPWdcUD1Ud2JkXzVPV309ME1sVWRqUXZLf0dEf3BvZjwxSVR9YDxxaDZgU29AcnJzUDxtcXVxPW1xNGBvUl9RM09DNFdLRmcyVUpmNTVzSzBXQTBIZCcpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl', 'src\\main\\resources\\static\\images\\uploads\\1739427761806_GAI_SE.pdf', 6, 1000, 'b34a5bc4-a803-4b7d-bc44-6084d3fed71d', '9702bb1c-460c-42d3-97f3-183efb7294ca');
 
 -- Dumping structure for table transport_application.order_line
 CREATE TABLE IF NOT EXISTS `order_line` (
@@ -52,12 +67,12 @@ CREATE TABLE IF NOT EXISTS `order_line` (
   CONSTRAINT `FKpf904tci8garypkvm32cqupye` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table transport_application.order_line: ~2 rows (approximately)
+-- Dumping data for table transport_application.order_line: ~0 rows (approximately)
+DELETE FROM `order_line`;
 INSERT INTO `order_line` (`quantity`, `order_id`, `product_id`) VALUES
-	(1, '06feadb3-4de0-46bb-b1f5-e05ef1d7836f', 'd86a7366-49b2-432a-ab41-1be1f84bd741'),
-	(4, '342e4115-fb27-426f-97d5-f52c9a357898', 'c62040b5-3504-481a-81fd-c4f2183bc794'),
-	(5, '665763ee-824f-4950-924d-f2ce71a79d1b', '962e670d-d1ab-4373-996f-a18382a23295'),
-	(3, 'e0d13de2-ae61-4197-9bb8-5cb2ad43840e', '050ab282-0969-4b77-b5fd-5eb56862f040');
+	(10, '1e265109-7b9e-4d8f-a51f-47e7811f2f90', '0b34fcae-fcc4-4a25-90c9-30f571499015'),
+	(10, '1e265109-7b9e-4d8f-a51f-47e7811f2f90', '88294c36-b280-400c-868d-3211152afec2'),
+	(20, 'cf005636-eace-4f20-928e-17396cf46177', '4026a253-28f9-443b-aae3-5952d210695c');
 
 -- Dumping structure for table transport_application.product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -67,12 +82,12 @@ CREATE TABLE IF NOT EXISTS `product` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table transport_application.product: ~2 rows (approximately)
+-- Dumping data for table transport_application.product: ~0 rows (approximately)
+DELETE FROM `product`;
 INSERT INTO `product` (`id`, `name`, `type`) VALUES
-	('050ab282-0969-4b77-b5fd-5eb56862f040', 'Pod KS', 0),
-	('962e670d-d1ab-4373-996f-a18382a23295', 'Pod', 0),
-	('c62040b5-3504-481a-81fd-c4f2183bc794', 'Pod', 0),
-	('d86a7366-49b2-432a-ab41-1be1f84bd741', 'Pod', 1);
+	('0b34fcae-fcc4-4a25-90c9-30f571499015', 'Supplements', 2),
+	('4026a253-28f9-443b-aae3-5952d210695c', 'Masks', 0),
+	('88294c36-b280-400c-868d-3211152afec2', 'Sunscreens', 0);
 
 -- Dumping structure for table transport_application.receipt
 CREATE TABLE IF NOT EXISTS `receipt` (
@@ -85,8 +100,10 @@ CREATE TABLE IF NOT EXISTS `receipt` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table transport_application.receipt: ~0 rows (approximately)
+DELETE FROM `receipt`;
 INSERT INTO `receipt` (`receipt_id`, `create_at`, `order_id`) VALUES
-	('ccff319c-3a2d-47af-977a-aea7d987f4fd', '2025-02-03 01:19:57.702140', '06feadb3-4de0-46bb-b1f5-e05ef1d7836f');
+	('8df49b1f-f7b6-4a28-b1b1-c4dcba62a01b', '2025-02-13 13:11:02.084970', '1e265109-7b9e-4d8f-a51f-47e7811f2f90'),
+	('d0ffd693-74ef-4309-a021-26d3f808c0a6', '2025-02-13 13:11:42.175950', 'cf005636-eace-4f20-928e-17396cf46177');
 
 -- Dumping structure for table transport_application.transportation_worker
 CREATE TABLE IF NOT EXISTS `transportation_worker` (
@@ -95,14 +112,16 @@ CREATE TABLE IF NOT EXISTS `transportation_worker` (
   `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `phone_number` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `profile_picture` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status` tinyint DEFAULT NULL,
   `username` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table transport_application.transportation_worker: ~0 rows (approximately)
-INSERT INTO `transportation_worker` (`id`, `email`, `name`, `password`, `phone_number`, `status`, `username`) VALUES
-	('21eabebf-c080-4572-a187-611fbb2c89ea', 'worker@mail.com', 'woker', '$2a$12$.AwZKf4eSTx9hwZaw/9LOObgNyKZWTbaZmlpmYGzSYNQoZyHpJIE6', '0958730001', 1, 'worker');
+DELETE FROM `transportation_worker`;
+INSERT INTO `transportation_worker` (`id`, `email`, `name`, `password`, `phone_number`, `profile_picture`, `status`, `username`) VALUES
+	('9702bb1c-460c-42d3-97f3-183efb7294ca', 'worker@example.com', 'worker worker', '$2a$12$tfzHxYx3excr4/Sujp38mu.o4Bo4xFpDsTZiMBzy2jcaTB0fQy5om', '0998887764', '/images/default-profile.png', 0, 'worker');
 
 -- Dumping structure for table transport_application.user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -111,15 +130,18 @@ CREATE TABLE IF NOT EXISTS `user` (
   `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `phone_number` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `profile_picture` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `role` tinyint DEFAULT NULL,
   `username` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table transport_application.user: ~2 rows (approximately)
-INSERT INTO `user` (`id`, `email`, `name`, `password`, `phone_number`, `role`, `username`) VALUES
-	('2f4c4ec3-9cc2-422f-9a07-3867efb670f4', 'admin@example.com', 'admin', '$2a$12$lrfmS0W9di8C11yJTXLSvOa.0o4vBrXHMytryluYOmkQcW.jcEOaq', '0123456789', 0, 'admin'),
-	('f0d69852-3596-4b8d-a07b-5417742a31e2', 'user@example.com', 'user', '$2a$12$UmH.kXsVd0nf.uJdonv/Z.yFWhYTiwOdnWGARGDzyJZeFrqo2yhQC', '0958738843', 1, 'user');
+-- Dumping data for table transport_application.user: ~0 rows (approximately)
+DELETE FROM `user`;
+INSERT INTO `user` (`id`, `email`, `name`, `password`, `phone_number`, `profile_picture`, `role`, `username`) VALUES
+	('1a2090a7-0255-4ad6-8ea6-f77af89e8eb4', 'admin@example.com', 'admin admin', '$2a$12$yeG5qyWWwvhZWpThrkMxF.BfRlmWwWpfms6aUxcBvwVP1Mc0XT1Bi', '0123456789', '/images/default-profile.png', 0, 'admin'),
+	('262143c7-a579-42de-b872-c520467b2719', 'user2@example.com', 'new user', '$2a$12$GUfHsU2SgN2gksBkolKBW.G4MRGrX5aCCU104JKqeNQTLKhsC0Th2', '0112223345', '/images/default-profile.png', 1, 'user2'),
+	('b34a5bc4-a803-4b7d-bc44-6084d3fed71d', 'customer@example.com', 'customer customer', '$2a$12$bvupl5LAR/hxlKoBv5ArV.O1xzeCMbYY8ZrlZhychs80sVIqZQ.Te', '0998887765', '/images/default-profile.png', 1, 'customer');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -15,6 +15,7 @@ import UserDetailView from "@/views/UserDetailView.vue";
 import CreateOrderView from "@/views/CreateOrderView.vue";
 import FailView from "@/views/FailView.vue";
 import SuccessView from "@/views/SuccessView.vue";
+import ReceiptView from "@/views/ReceiptView.vue";
 
 const routes = [
   {
@@ -105,11 +106,25 @@ const routes = [
     path: "/payment/success",
     name: "success",
     component: SuccessView,
+    meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
+  },
+  {
+    path: "/receipt/:id",
+    name: "receipt",
+    component: ReceiptView,
+    meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER"] },
   },
   {
     path: "/payment/fail",
     name: "fail",
     component: FailView,
+    meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
+  },
+  {
+    path: "/payment/history",
+    name: "history",
+    component: () => import("@/views/HistoryView.vue"),
+    meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
   },
   {
     path: "/edit-profile",
@@ -117,7 +132,6 @@ const routes = [
     component: () => import("@/views/EditProfileView.vue"),
     meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
   },
-
 ];
 
 const router = createRouter({

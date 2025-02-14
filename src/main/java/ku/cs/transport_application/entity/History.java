@@ -2,28 +2,28 @@ package ku.cs.transport_application.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import ku.cs.transport_application.common.ProductType;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @Entity
-public class Product {
+@Table(name = "`history`")
+public class History {
     @Id
     @GeneratedValue
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID id;
+    private UUID historyId;
 
-    private String name;
+    private double amount;
 
-    private ProductType type;
+    private LocalDateTime paymentDate;
 
-    @OneToMany(mappedBy = "product")
+    @OneToOne
     @JsonIgnore
-    private List<OrderLine> orderLines = new ArrayList<>();
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 }

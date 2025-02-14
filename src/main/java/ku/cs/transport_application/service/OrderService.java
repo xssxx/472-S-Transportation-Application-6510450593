@@ -60,6 +60,12 @@ public class OrderService {
         return null;
     }
 
+    public Order getOrdersByOrderId(UUID id) {
+        Optional<Order> recordOptional = orderRepository.findById(id);
+        return recordOptional.orElse(null);
+    }
+
+
     public List<OrderDTO> getOrdersByWorker(UUID id) {
         Optional<TransportationWorker> recordOptional = twRepository.findById(id);
         if (recordOptional.isPresent()) {
@@ -277,20 +283,5 @@ public class OrderService {
             recordOrder.setWorker(recordWorker);
             orderRepository.save(recordOrder);
         }
-    }
-
-    public List<OrderDTO> searchOrders(String keyword) {
-        return orderRepository.findByCustomerName(keyword).stream()
-                .map(order -> new OrderDTO(
-                        order.getId(),
-                        order.getStatus(),
-                        order.getCustomerName(),
-                        order.getDate(),
-                        order.getDeliveredDate(),
-                        order.getUser().getName(),
-                        order.getTotal(),
-                        order.getPaymentLink()
-                ))
-                .collect(Collectors.toList());
     }
 }

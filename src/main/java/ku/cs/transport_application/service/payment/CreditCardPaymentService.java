@@ -17,10 +17,12 @@ public class CreditCardPaymentService implements PaymentService {
 
     @Override
     public PaymentResponse createPaymentLink(Order order) throws StripeException {
+        if (order == null || order.getTotal() <= 0) {
+            throw new IllegalArgumentException("Invalid order: Order must not be null and total must be greater than zero.");
+        }
+
         Stripe.apiKey = stripeSecretKey;
 
-        if (order == null || order.getTotal() <= 0)
-            throw new IllegalArgumentException("Invalid order: Order must not be null and total must be greater than zero.");
 
         double total = order.getTotal() * 100;
 
@@ -39,7 +41,13 @@ public class CreditCardPaymentService implements PaymentService {
                                         .build())
                                 .build())
                         .build())
+                .setPaymentIntentData(
+                        SessionCreateParams.PaymentIntentData.builder()
+                                .putMetadata("order_id", order.getId().toString())
+                                .build()
+                )
                 .build();
+
 
         Session session = Session.create(params);
 

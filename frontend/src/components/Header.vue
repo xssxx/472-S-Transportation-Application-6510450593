@@ -3,21 +3,38 @@
     <div class="header-container">
       <router-link to="/main" class="logo">Transport application</router-link>
       <nav class="nav">
-        <router-link v-if="userRole === 'ADMIN'" to="/orders">Order</router-link>
-        <router-link v-if="userRole === 'ADMIN'" to="/worker-list">Transport worker</router-link>
-        <router-link v-if="userRole === 'ADMIN'" to="/user-list">User</router-link>
-        <router-link v-if="userRole === 'ADMIN'" to="/create-user">Create User</router-link>
+        <router-link v-if="userRole === 'ADMIN'" to="/orders"
+          >Order</router-link
+        >
+        <router-link v-if="userRole === 'ADMIN'" to="/worker-list"
+          >Transport worker</router-link
+        >
+        <router-link v-if="userRole === 'ADMIN'" to="/user-list"
+          >User</router-link
+        >
+        <router-link v-if="userRole === 'ADMIN'" to="/create-user"
+          >Create User</router-link
+        >
 
-        <router-link v-if="userRole === 'USER'" to="/create-order">Create Order</router-link>
-        <router-link v-if="userRole === 'USER' || userRole === 'WORKER'" to="/orders">My Order</router-link>
+        <router-link v-if="userRole === 'USER'" to="/create-order"
+          >Create Order</router-link
+        >
+        <router-link
+          v-if="userRole === 'USER' || userRole === 'WORKER'"
+          to="/orders"
+          >My Order</router-link
+        >
+        <router-link v-if="userRole === 'USER'" to="/payment/history"
+          >Transaction History</router-link
+        >
       </nav>
     </div>
     <div class="profile" ref="profileContainer">
       <img
-          :src="`http://localhost:8080${profile.profilePicture}`"
-          alt="Profile"
-          class="profile-image"
-          @click="toggleProfileMenu"
+        :src="`http://localhost:8080${profile.profilePicture}`"
+        alt="Profile"
+        class="profile-image"
+        @click="toggleProfileMenu"
       />
       <div v-if="showProfileMenu" class="profile-menu">
         <a href="#" @click.prevent="editProfile">Edit Profile</a>
@@ -39,7 +56,7 @@ export default {
     return {
       showProfileMenu: false,
       profile: {
-        profilePicture: ""
+        profilePicture: "",
       },
     };
   },
@@ -59,35 +76,39 @@ export default {
     toggleProfileMenu() {
       this.showProfileMenu = !this.showProfileMenu;
       if (this.showProfileMenu) {
-        document.addEventListener('click', this.handleClickOutside);
+        document.addEventListener("click", this.handleClickOutside);
       } else {
-        document.removeEventListener('click', this.handleClickOutside);
+        document.removeEventListener("click", this.handleClickOutside);
       }
     },
     handleClickOutside(event) {
       if (!this.$refs.profileContainer?.contains(event.target)) {
         this.showProfileMenu = false;
-        document.removeEventListener('click', this.handleClickOutside);
+        document.removeEventListener("click", this.handleClickOutside);
       }
     },
     async fetchUserProfile() {
       try {
-        const response = await axios.get(`http://localhost:8080/users/${this.id}`);
-        this.profile = {...response.data};
+        const response = await axios.get(
+          `http://localhost:8080/users/${this.id}`
+        );
+        this.profile = { ...response.data };
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
     },
     async fetchWorkerProfile() {
       try {
-        const response = await axios.get(`http://localhost:8080/transportation-workers/${this.id}`);
-        this.profile = {...response.data};
+        const response = await axios.get(
+          `http://localhost:8080/transportation-workers/${this.id}`
+        );
+        this.profile = { ...response.data };
       } catch (error) {
         console.error("Error fetching worker profile:", error);
       }
     },
     editProfile() {
-      this.$router.push('/edit-profile');
+      this.$router.push("/edit-profile");
       this.showProfileMenu = false;
     },
     contact() {
@@ -98,11 +119,11 @@ export default {
       this.$store.dispatch("clearUserData");
       this.$router.push("/login");
       this.showProfileMenu = false;
-    }
+    },
   },
   beforeDestroy() {
-    document.removeEventListener('click', this.handleClickOutside);
-  }
+    document.removeEventListener("click", this.handleClickOutside);
+  },
 };
 </script>
 

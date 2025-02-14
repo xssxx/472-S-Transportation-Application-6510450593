@@ -1,9 +1,9 @@
 <template>
-  <Header></Header>
+  <Header />
   <div class="sub-container">
     <h2>Create Order</h2>
     <div class="form-container">
-      <form @submit.prevent="submitOrder">
+      <form @submit.prevent="submitOrder" class="form">
         <div class="customer-info">
           <div class="text-box">
             <label for="customerName">Customer Name:</label>
@@ -156,7 +156,7 @@ export default {
 <style scoped>
 .sub-container {
   max-width: 70%;
-  height: 94vh;
+  height: calc(100vh - 62px);
   margin: 0 auto;
   background-color: #f9f9f9;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -174,6 +174,12 @@ export default {
   flex: 1;
 }
 
+.form {
+  padding: 2em;
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .customer-info {
   display: flex;
   gap: 20px;
@@ -182,8 +188,10 @@ export default {
 
 .scroll-container {
   box-sizing: border-box;
-  max-height: 500px;
-  min-height: 500px;
+  max-width: 100%;
+  max-height: 100%;
+  max-height: 100%;
+  min-height: calc(100vh / 2);
   overflow-y: overlay;
   background-color: rgb(255, 255, 255);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
