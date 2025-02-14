@@ -14,7 +14,7 @@
             <input
                 type="file"
                 id="profilePicture"
-                accept="image/*"
+                accept=".jpg, .jpeg, .png"
                 @change="onFileChange"
                 hidden
             />
@@ -147,6 +147,19 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
+        const allowedTypes = ["image/jpeg", "image/png"];
+        const maxSize = 5 * 1024 * 1024;
+
+        if (!allowedTypes.includes(file.type)) {
+          alert("Only JPG and PNG files are allowed");
+          return;
+        }
+
+        if (file.size > maxSize) {
+          alert("File size must not exceed 5MB");
+          return;
+        }
+
         this.selectedProfilePicture = file;
         this.profilePictureUrl = URL.createObjectURL(file);
       }
