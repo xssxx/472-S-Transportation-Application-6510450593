@@ -3,10 +3,9 @@ package ku.cs.transport_application.controller;
 import ku.cs.transport_application.DTO.OrderDTO;
 import ku.cs.transport_application.common.OrderStatus;
 import ku.cs.transport_application.common.TransportationWorkerStatus;
-import ku.cs.transport_application.service.FileService;
-import ku.cs.transport_application.service.MailSenderService;
-import ku.cs.transport_application.service.OrderService;
-import ku.cs.transport_application.service.TransportationWorkerService;
+import ku.cs.transport_application.entity.Order;
+import ku.cs.transport_application.request.OrderRequest;
+import ku.cs.transport_application.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -22,6 +21,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private EditOrderService editOrderService;
 
     @Autowired
     private MailSenderService mailSenderService;
@@ -100,7 +102,7 @@ public class OrderController {
 
     @PostMapping("/orders/order-detail/{orderId}/change-status")
     public ResponseEntity<?> changeOrderStatus(@PathVariable("orderId") UUID orderId,
-                                                        @RequestParam("status") OrderStatus status) {
+                                               @RequestParam("status") OrderStatus status) {
         orderService.upDateOrderStatus(orderId, status);
         mailSenderService.sendEmail(orderId);
         return new ResponseEntity<>(Map.of("message", "Order status updated successfully"), HttpStatus.OK);
@@ -120,4 +122,27 @@ public class OrderController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(file);
     }
+
+    @PutMapping("/orders/edit-order/{orderId}")
+    public ResponseEntity<?> editOrder(@PathVariable("orderId") UUID orderId, @RequestBody OrderRequest request) {
+        try {
+            editOrderService.editOrder(orderId, request);
+            return ResponseEntity.ok(Map.of("message", "Order updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Error updating order", "message", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/orders/edit-order/{orderId}")
+    public ResponseEntity<?> getOrderById(@PathVariable UUID orderId) {
+        try {
+            Order order = orderService.getByOrderId(orderId)
+                    .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching order: " + e.getMessage());
+        }
+    }
+
 }

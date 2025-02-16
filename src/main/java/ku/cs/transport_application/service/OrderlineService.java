@@ -27,7 +27,4 @@ public class OrderlineService {
         return orderLineRepository.findByOrderId(id);
     }
 
-//    public List<Order> getProductIdByOrderId(UUID id) {
-//        return orderLineRepository.
-//    }
 }

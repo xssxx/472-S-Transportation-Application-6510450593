@@ -3,6 +3,7 @@
     <Header></Header>
     <div class="main-container">
       <div class="order-detail-container" v-if="order">
+        <button class="edit-button" v-if="userRole === 'USER' && order.status === 'UNPAID'" @click=editOrder>Edit</button>
         <button class="back-button" @click="$router.back()">Back</button>
         <p class="order-id-text">Order ID: {{ this.$route.params.orderId }}</p>
         <div class="order-info-wrapper">
@@ -114,9 +115,14 @@ export default {
         console.error("Error fetching order details:", error);
       }
     },
-
     formattedDate(date) {
       return dayjs(date).format("DD/MM/YYYY HH:mm:ss");
+    },
+    editOrder() {
+      const orderId = this.$route.params.orderId;
+      this.$router.push({
+        name: 'edit-order',
+        query: {orderDetails: JSON.stringify(this.order)}});
     },
     checked() {
       const orderId = this.$route.params.orderId;
@@ -253,10 +259,8 @@ export default {
   margin-top: 60px;
 }
 
-.back-button {
+.back-button{
   position: absolute;
-  top: 20px;
-  right: 20px;
   background-color: var(--button-bg-color);
   color: var(--button-text-color);
   border: none;
@@ -264,7 +268,18 @@ export default {
   border-radius: 5px;
   cursor: pointer;
   width: auto;
-  margin-bottom: 20px;
+}
+.edit-button {
+  position: absolute;
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  top: 40px;
+  right: 100px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: auto;
 }
 
 .checked-button {

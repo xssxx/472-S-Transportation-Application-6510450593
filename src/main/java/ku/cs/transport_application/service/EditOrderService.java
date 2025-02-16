@@ -1,42 +1,53 @@
 package ku.cs.transport_application.service;
 
 import ku.cs.transport_application.DTO.PaymentResponse;
-import ku.cs.transport_application.common.OrderStatus;
 import ku.cs.transport_application.entity.*;
 import ku.cs.transport_application.repository.OrderLineRepository;
 import ku.cs.transport_application.repository.OrderRepository;
 import ku.cs.transport_application.repository.ProductRepository;
-import ku.cs.transport_application.repository.UserRepository;
+import ku.cs.transport_application.repository.ReceiptRepository;
 import ku.cs.transport_application.request.OrderRequest;
 import ku.cs.transport_application.request.ProductDetailRequest;
 import ku.cs.transport_application.service.payment.CalculatePriceService;
 import ku.cs.transport_application.service.payment.PaymentFactory;
 import ku.cs.transport_application.service.payment.PaymentService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
-public class CreateOrderService {
-    private final OrderRepository orderRepository;
-    private final OrderLineRepository orderLineRepository;
-    private final UserRepository userRepository;
-    private final ProductRepository productRepository;
-    private final PaymentFactory paymentFactory;
-    private final ReceiptService receiptService;
+public class EditOrderService {
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private OrderLineRepository orderLineRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private ReceiptRepository receiptRepository;
+    @Autowired
+    private PaymentFactory paymentFactory;
+    @Autowired
+    private ReceiptService receiptService;
 
-    public void createOrder(OrderRequest request) throws Exception {
-        Order order = new Order();
+    @Transactional
+    public void editOrder(UUID orderId, OrderRequest request) throws Exception {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new Exception("Order not found"));
+        // ลบ OrderLine เดิม
+        List<OrderLine> existingOrderLines = orderLineRepository.findByOrderId(orderId);
+        if (!existingOrderLines.isEmpty()) {
+            orderLineRepository.deleteByOrderId(orderId);
+        }
+
+        // อัปเดตข้อมูลของออเดอร์
         order.setCustomerName(request.getCustomerName());
         order.setCustomerAddress(request.getCustomerAddress());
-        order.setStatus(OrderStatus.UNPAID);
-        order.setDate(LocalDateTime.now());
-        order.setUser(userRepository.findByUsername(request.getUsername()));
-        order.setTotal(0); // ยังไม่ได้คำนวณราคาสินค้า
+        order.setTotal(0);
 
-        // บันทึก Order ก่อน ไม่งั้น order line จะ generate order id มั่ว
         orderRepository.save(order);
 
         int totalShippingCost = 0;
@@ -77,7 +88,9 @@ public class CreateOrderService {
         // อัพเดตข้อมูล order ที่มี payment link
         orderRepository.save(order);
 
-        //สร้างใบเสร็จหลังจากชำระเงินแล้ว
-        receiptService.createReceipt(order.getId());
+        //ลบใบเสร็จอันเก่า
+        receiptRepository.deleteByOrderId(orderId);
+        //สร้างใบเสร็จใหม่
+        receiptService.createReceipt(orderId);
     }
 }
