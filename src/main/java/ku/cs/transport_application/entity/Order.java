@@ -42,7 +42,7 @@ public class Order {
     @JsonIgnore
     private TransportationWorker worker;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<OrderLine> orderLines = new ArrayList<>();
 

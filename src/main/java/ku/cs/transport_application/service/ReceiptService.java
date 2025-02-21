@@ -1,8 +1,6 @@
 package ku.cs.transport_application.service;
 
 import ku.cs.transport_application.entity.Order;
-import ku.cs.transport_application.entity.OrderLine;
-import ku.cs.transport_application.entity.Product;
 import ku.cs.transport_application.entity.Receipt;
 import ku.cs.transport_application.repository.OrderRepository;
 import ku.cs.transport_application.repository.ReceiptRepository;
@@ -29,6 +27,20 @@ public class ReceiptService {
 
     public void createReceipt(UUID orderId) throws Exception {
         Receipt receipt = new Receipt();
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            receipt.setOrder(order);
+            receipt.setCreateAt(LocalDateTime.now());
+            receiptRepository.save(receipt);
+        } else {
+            throw new Exception("Order not found.");
+        }
+    }
+
+    public void newReceipt(UUID orderId) throws Exception {
+        Receipt receipt = receiptRepository.findByOrderId(orderId);
         Optional<Order> orderOptional = orderRepository.findById(orderId);
 
         if (orderOptional.isPresent()) {

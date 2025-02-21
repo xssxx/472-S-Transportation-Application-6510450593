@@ -2,10 +2,7 @@ package ku.cs.transport_application.service;
 
 import ku.cs.transport_application.DTO.PaymentResponse;
 import ku.cs.transport_application.entity.*;
-import ku.cs.transport_application.repository.OrderLineRepository;
-import ku.cs.transport_application.repository.OrderRepository;
-import ku.cs.transport_application.repository.ProductRepository;
-import ku.cs.transport_application.repository.ReceiptRepository;
+import ku.cs.transport_application.repository.*;
 import ku.cs.transport_application.request.OrderRequest;
 import ku.cs.transport_application.request.ProductDetailRequest;
 import ku.cs.transport_application.service.payment.CalculatePriceService;
@@ -15,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,24 +31,27 @@ public class EditOrderService {
 
     @Transactional
     public void editOrder(UUID orderId, OrderRequest request) throws Exception {
+        //โหลด Order เดิม
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new Exception("Order not found"));
-        // ลบ OrderLine เดิม
-        List<OrderLine> existingOrderLines = orderLineRepository.findByOrderId(orderId);
-        if (!existingOrderLines.isEmpty()) {
-            orderLineRepository.deleteByOrderId(orderId);
-        }
+                .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        // อัปเดตข้อมูลของออเดอร์
+        //ลบ OrderLine เก่าทั้งหมด
+        orderLineRepository.deleteByOrderId(orderId);
+
+        //ลบ Product ที่เกี่ยวข้องทั้งหมด
+        productRepository.deleteByOrderId(orderId);
+
+        //อัปเดตข้อมูล Order
         order.setCustomerName(request.getCustomerName());
         order.setCustomerAddress(request.getCustomerAddress());
-        order.setTotal(0);
+        order.setTotal(0); // Reset total price
 
+        //บันทึก Order
         orderRepository.save(order);
 
         int totalShippingCost = 0;
 
-        // สร้าง OrderLine และบันทึกทีละตัว
+        //ใส่สินค้าใหม่ทั้งหมด
         for (ProductDetailRequest productDetail : request.getProductDetails()) {
             Product product = new Product();
             product.setName(productDetail.getProductName());
@@ -73,24 +72,20 @@ public class EditOrderService {
             int shippingCost = priceService.calculateShipping(product.getType(), productDetail.getQuantity());
             totalShippingCost += shippingCost;
 
-            // บันทึก OrderLine
             orderLineRepository.save(orderLine);
         }
 
-        // คำนวณราคาทั้งหมด (รวมราคาสินค้าและค่าขนส่ง)
+        //คำนวณราคาทั้งหมด(รวมค่าขนส่ง)
         order.setTotal(totalShippingCost);
 
-        // สร้างลิงก์การชำระเงิน
+        //สร้างลิงก์ชำระเงินใหม่
         PaymentService paymentService = paymentFactory.getPaymentService(request.getPaymentMethod());
         PaymentResponse response = paymentService.createPaymentLink(order);
         order.setPaymentLink(response.getPaymentLink());
 
-        // อัพเดตข้อมูล order ที่มี payment link
+        //บันทึก Order
         orderRepository.save(order);
-
-        //ลบใบเสร็จอันเก่า
-        receiptRepository.deleteByOrderId(orderId);
         //สร้างใบเสร็จใหม่
-        receiptService.createReceipt(orderId);
+        receiptService.newReceipt(orderId);
     }
 }
