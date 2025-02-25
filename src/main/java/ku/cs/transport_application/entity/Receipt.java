@@ -19,6 +19,7 @@ public class Receipt {
 
     @OneToOne
     @JoinColumn(name = "order_id")
+    @JsonIgnore
     private Order order;
 
     private LocalDateTime createAt;
