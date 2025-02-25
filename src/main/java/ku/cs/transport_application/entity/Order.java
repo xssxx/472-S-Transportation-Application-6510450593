@@ -46,4 +46,11 @@ public class Order {
     @JsonIgnore
     private List<OrderLine> orderLines = new ArrayList<>();
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private History history;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Receipt receipt;
 }
