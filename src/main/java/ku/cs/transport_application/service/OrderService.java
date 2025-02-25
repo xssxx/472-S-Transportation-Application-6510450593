@@ -284,4 +284,8 @@ public class OrderService {
             orderRepository.save(recordOrder);
         }
     }
+
+    public Optional<Order> getByOrderId(UUID orderId) {
+        return orderRepository.findById(orderId);
+    }
 }

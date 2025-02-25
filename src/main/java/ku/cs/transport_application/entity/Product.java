@@ -23,7 +23,7 @@ public class Product {
 
     private ProductType type;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<OrderLine> orderLines = new ArrayList<>();
 }

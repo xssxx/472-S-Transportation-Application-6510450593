@@ -16,6 +16,8 @@ import CreateOrderView from "@/views/CreateOrderView.vue";
 import FailView from "@/views/FailView.vue";
 import SuccessView from "@/views/SuccessView.vue";
 import ReceiptView from "@/views/ReceiptView.vue";
+import EditProfileView from "@/views/EditProfileView.vue";
+import EditOrderView from "@/views/EditOrderView.vue";
 
 const routes = [
   {
@@ -131,6 +133,12 @@ const routes = [
     name: "edit-profile",
     component: () => import("@/views/EditProfileView.vue"),
     meta: { requiresAuth: true, allowedRoles: ["ADMIN", "USER", "WORKER"] },
+  },
+  {
+    path: "/orders/edit-order/:orderId",
+    name: "edit-order",
+    component: () => import("@/views/EditOrderView.vue"),
+    meta: { requiresAuth: true, allowedRoles: ["USER"] },
   },
 ];
 
