@@ -42,11 +42,17 @@
         </div>
 
         <button class="back-button" @click="$router.back()">Back</button>
+
+        <button
+            v-if="userRole === 'ADMIN' && canDeleteUser"
+            class="delete-button"
+            @click="deleteUser">
+          Delete User
+        </button>
       </div>
     </div>
   </div>
 </template>
-
 
 <script>
 import axios from 'axios';
@@ -66,15 +72,27 @@ export default {
       userId: this.$route.params.userId,
       userInfo: null,
       orders: [],
-      role: "admin",
+      canDeleteUser: false,
     };
   },
   created() {
     if (this.userId) {
+      console.log("User Role:", this.userRole);
       this.fetchUserInfo();
       this.fetchUserOrders();
     } else {
       console.error("userId is not defined.");
+    }
+  },
+  watch: {
+    orders: {
+      deep: true,
+      handler(newOrders) {
+        console.log("Orders updated:", newOrders);
+        this.canDeleteUser = newOrders.length > 0
+            && newOrders.every(order => ["completed", "unpaid"].includes(order.status.toLowerCase()))
+        console.log("Can delete user:", this.canDeleteUser);
+      }
     }
   },
   methods: {
@@ -92,6 +110,19 @@ export default {
         this.orders = response.data;
       } catch (error) {
         console.error("Error fetching user orders:", error);
+      }
+    },
+    async deleteUser() {
+      if (!confirm("Are you sure you want to delete this user?")) {
+        return;
+      }
+      try {
+        await axios.delete(`http://localhost:8080/users/${this.userId}/delete`);
+        alert("User deleted successfully!");
+        this.$router.push("/user-list");
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        alert("Failed to delete user.");
       }
     },
     formattedDate(date) {
@@ -210,4 +241,18 @@ export default {
     padding: 10px;
     text-align: left;
   }
+
+   .delete-button {
+     background-color: red;
+     color: white;
+     border: none;
+     padding: 10px 20px;
+     border-radius: 5px;
+     cursor: pointer;
+     margin-top: 20px;
+   }
+  .delete-button:hover {
+    background-color: darkred;
+  }
+
   </style>
