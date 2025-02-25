@@ -1,5 +1,6 @@
 package ku.cs.transport_application.controller;
 
+import ku.cs.transport_application.common.OrderStatus;
 import ku.cs.transport_application.common.UserRole;
 import ku.cs.transport_application.entity.User;
 import ku.cs.transport_application.service.FileService;
@@ -71,6 +72,14 @@ public class UserController {
         if (record == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
+
+        boolean hasInvalidOrders = record.getOrders().stream()
+                .anyMatch(order -> !(order.getStatus() == OrderStatus.COMPLETED || order.getStatus() == OrderStatus.UNPAID));
+
+        if (hasInvalidOrders) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User cannot be deleted due to invalid orders status");
+        }
+
         userService.deleteUser(record);
         return ResponseEntity.ok("User deleted successfully");
     }
