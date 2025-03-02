@@ -7,13 +7,12 @@ import ku.cs.transport_application.entity.Order;
 import ku.cs.transport_application.entity.OrderLine;
 import ku.cs.transport_application.entity.TransportationWorker;
 import ku.cs.transport_application.entity.User;
-import ku.cs.transport_application.repository.OrderLineRepository;
-import ku.cs.transport_application.repository.OrderRepository;
-import ku.cs.transport_application.repository.TransportationWorkerRepository;
-import ku.cs.transport_application.repository.UserRepository;
+import ku.cs.transport_application.repository.*;
 import ku.cs.transport_application.request.OrderRequest;
 import ku.cs.transport_application.request.ProductDetailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +36,9 @@ public class OrderService {
 
     @Autowired
     private TransportationWorkerRepository twRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<OrderDTO> getOrdersByUser(UUID id) {
         Optional<User> recordOptional = userRepository.findById(id);
@@ -287,5 +289,20 @@ public class OrderService {
 
     public Optional<Order> getByOrderId(UUID orderId) {
         return orderRepository.findById(orderId);
+    }
+
+    public void deleteOrder(UUID orderId) {
+        //หา order จากไอดี และแปลง Optional<Order> -> Order
+        Optional<Order> order = orderRepository.findById(orderId);
+        //ลบ order
+        orderRepository.delete(order.get());
+    }
+
+    public boolean checkOrderCanDelete(UUID orderId) {
+        //หา order จากไอดี และแปลง Optional<Order> -> Order
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Order order = optionalOrder.get();
+        // คืนค่า true หากออเดอร์ COMPLETED หรือ UNPAID นอกจากนั้น false
+        return order.getStatus() == OrderStatus.COMPLETED || order.getStatus() == OrderStatus.UNPAID;
     }
 }

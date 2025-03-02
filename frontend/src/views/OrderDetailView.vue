@@ -3,6 +3,7 @@
     <Header></Header>
     <div class="main-container">
       <div class="order-detail-container" v-if="order">
+        <button class="delete-button" v-if="userRole === 'USER' && (order.status === 'UNPAID' || order.status === 'COMPLETED')" @click=deleteOrder>Delete</button>
         <button class="edit-button" v-if="userRole === 'USER' && order.status === 'UNPAID'" @click=editOrder>Edit</button>
         <button class="back-button" @click="$router.back()">Back</button>
         <p class="order-id-text">Order ID: {{ this.$route.params.orderId }}</p>
@@ -123,6 +124,25 @@ export default {
       this.$router.push({
         name: 'edit-order',
         query: {orderDetails: JSON.stringify(this.order)}});
+    },
+    deleteOrder() {
+      const orderId = this.$route.params.orderId;
+      if (confirm("Do you want to delete this order?")) { // ยืนยันการลบ
+        axios
+          .delete(`http://localhost:8080/orders/${orderId}/delete`)
+          .then((response) => {
+            alert(response.data || "Order delete successfully");
+            this.$router.push({ name: "orders" }); // ย้ายไปหน้า orders หลังลบสำเร็จ
+          })
+          .catch((error) => {
+            console.error("Error deleting order:", error);
+            if (error.response && error.response.status === 403) {
+              alert("Order cannot be deleted due to invalid orders status");
+            } else {
+              alert("An error occurred while deleting the order");
+            }
+          });
+      }
     },
     checked() {
       const orderId = this.$route.params.orderId;
@@ -280,6 +300,18 @@ export default {
   border-radius: 5px;
   cursor: pointer;
   width: auto;
+}
+.delete-button {
+  position: absolute;
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: auto;
+  bottom: 20px;
+  right: 20px;
 }
 
 .checked-button {

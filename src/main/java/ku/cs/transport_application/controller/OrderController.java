@@ -134,6 +134,16 @@ public class OrderController {
         }
     }
 
+    @DeleteMapping("/orders/{orderId}/delete")
+    public ResponseEntity<?> deleteOrder(@PathVariable("orderId") UUID orderId) {
+        boolean hasInvalidOrders = orderService.checkOrderCanDelete(orderId);
+        if (!hasInvalidOrders) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Order cannot be deleted due to invalid orders status");
+        }
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.ok("Order deleted successfully");
+    }
+
     @GetMapping("/orders/edit-order/{orderId}")
     public ResponseEntity<?> getOrderById(@PathVariable UUID orderId) {
         try {
@@ -144,5 +154,4 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching order: " + e.getMessage());
         }
     }
-
 }
