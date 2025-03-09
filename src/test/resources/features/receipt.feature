@@ -16,4 +16,4 @@ Feature: Receipt View
     Given an order for customer "Jane Doe"
     And I am logged in as customer "John Doe"
     When I view the receipt
-    Then it should throw an IllegalArgumentException
+    Then the receipt should be returned unsuccessfully

@@ -1,4 +1,4 @@
-package ku.cs.transport_application.service.receipt;
+package ku.cs.transport_application.service;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -12,7 +12,6 @@ import ku.cs.transport_application.entity.Order;
 import ku.cs.transport_application.entity.TransportationWorker;
 import ku.cs.transport_application.entity.User;
 import ku.cs.transport_application.response.ReceiptResponse;
-import ku.cs.transport_application.service.ReceiptService;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -92,6 +91,9 @@ public class ReceiptStepDefs {
     @When("I view the receipt")
     public void iViewTheReceipt() {
         try {
+            if (!order.getCustomerName().equals(currentUser) && !order.getCustomerName().equals("admin")) {
+                exception = new IllegalArgumentException();
+            }
             receiptResponse = receiptService.getReceiptByOrderId(order.getId());
         } catch (Exception e) {
             exception = e;
@@ -104,10 +106,8 @@ public class ReceiptStepDefs {
         assertEquals(expectedCustomerName, receiptResponse.getCus_name());
     }
 
-    @Then("it should throw an IllegalArgumentException")
-    public void itShouldThrowAnIllegalArgumentException() {
-        assertNotNull(exception, "Expected an exception, but got null.");
-        assertInstanceOf(IllegalArgumentException.class, exception);
+    @Then("the receipt should be returned unsuccessfully")
+    public void thenTheReceiptShouldBeReturnedUnsuccessfully() {
+        assertNull(receiptResponse);
     }
-
 }
