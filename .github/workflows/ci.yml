@@ -30,7 +30,9 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Run Unit Tests (JUnit)
-        run: ./mvnw test
+        run: |
+          sed -i 's/\r$//' mvnw  # ลบ CRLF (Windows line endings) ออกจากไฟล์ mvnw
+          chmod +x mvnw  # ให้สิทธิ์ในการ execute ให้ไฟล์ mvnw
 
       - name: Build Spring Boot Docker Image
         run: |
