@@ -1,0 +1,88 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  test_and_build:
+    if: github.ref == 'refs/heads/develop' || github.event.pull_request.base.ref == 'develop'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Check for JUnit Tests
+        id: check_tests
+        run: |
+          if [ -d "src/test" ] && [ "$(find src/test -name '*Test.java' | wc -l)" -gt 0 ]; then
+            echo "has_tests=true" >> $GITHUB_ENV
+          else
+            echo "has_tests=false" >> $GITHUB_ENV
+          fi
+
+      - name: Run Unit Tests (JUnit)
+        if: env.has_tests == 'true'
+        run: ./mvnw test
+
+      - name: Build Docker Image
+        run: |
+          docker build -t my-app:latest .
+
+  deploy_main:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: test_and_build
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-app:latest .
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push Docker Image to Docker Hub
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/my-app:latest ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}
+
+      - name: Auto Generate GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Release v1.0.${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+  validate_pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate PR Title Format
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          if [[ ! "$PR_TITLE" =~ ^Feature\ .+ ]]; then
+            echo "❌ Pull Request title must start with 'Feature <Name>'"
+            exit 1
+          fi
