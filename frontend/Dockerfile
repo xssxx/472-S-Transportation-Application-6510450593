@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # ตั้งพอร์ตที่ container จะใช้
-EXPOSE 4173
+EXPOSE 5173
 
 # รันแอปพลิเคชันในโหมด production ด้วย Vite preview
 CMD ["npm", "run", "preview"]
