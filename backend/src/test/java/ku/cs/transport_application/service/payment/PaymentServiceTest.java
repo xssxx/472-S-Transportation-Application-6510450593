@@ -2,7 +2,6 @@ package ku.cs.transport_application.service.payment;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import io.github.cdimascio.dotenv.Dotenv;
 import ku.cs.transport_application.DTO.PaymentResponse;
 import ku.cs.transport_application.entity.Order;
 import org.junit.jupiter.api.BeforeEach;
