@@ -39,6 +39,10 @@ public class FileService {
         String fileName = file.getOriginalFilename();
         assert fileName != null;
 
+        // Validate the filename to prevent path traversal attacks
+        if (fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
+            throw new IllegalArgumentException("Invalid filename");
+        }
         Files.createDirectories(Paths.get(uploadDir));
 
         fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
@@ -99,6 +103,11 @@ public class FileService {
 
         String fileName = file.getOriginalFilename();
         assert fileName != null;
+
+        // Validate the filename to prevent path traversal attacks
+        if (fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
+            throw new IllegalArgumentException("Invalid filename");
+        }
 
         String fileExtension = fileName.substring(fileName.lastIndexOf("."));
         newFileName = UUID.randomUUID() + fileExtension;
