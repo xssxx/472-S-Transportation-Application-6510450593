@@ -43,9 +43,10 @@ public class FileService {
         if (fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
             throw new IllegalArgumentException("Invalid filename");
         }
+
         Files.createDirectories(Paths.get(uploadDir));
 
-        fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        fileName = System.currentTimeMillis() + "_" + fileName;
 
         File uploadedFile = new File(uploadDir + fileName);
         Path path = Paths.get(uploadDir, fileName);
