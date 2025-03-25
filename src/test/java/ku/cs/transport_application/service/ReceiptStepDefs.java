@@ -1,6 +1,7 @@
 package ku.cs.transport_application.service;
 
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
@@ -20,6 +21,8 @@ import java.util.Collections;
 public class ReceiptStepDefs {
     private ReceiptService receiptService;
     private Order order;
+    private Order order2;
+    private User dummyUser;
     private ReceiptResponse receiptResponse;
     private Exception exception;
     private String currentUser;
@@ -45,7 +48,7 @@ public class ReceiptStepDefs {
         dummyWorker.setEmail("worker@example.com");
         order.setWorker(dummyWorker);
 
-        User dummyUser = new User();
+        dummyUser = new User();
         dummyUser.setName(customerName);
         order.setUser(dummyUser);
     }
@@ -109,5 +112,46 @@ public class ReceiptStepDefs {
     @Then("the receipt should be returned unsuccessfully")
     public void thenTheReceiptShouldBeReturnedUnsuccessfully() {
         assertNull(receiptResponse);
+    }
+
+    @And("I have placed an order successfully")
+    public void iOrderSuccessfulWithOrderId() {
+        order.setStatus(OrderStatus.COMPLETED);
+    }
+
+    @Then("the receipt should return orderID same as the one I ordered")
+    public void theReceiptShouldReturnOrderIDSameAsTheOneIOrdered() {
+        assertEquals(order.getId(), order.getReceipt().getReceiptId());
+    }
+
+    @Given("a new order for customer {string}")
+    public void aNewOrderForCustomer(String customerName){
+        order2 = new Order();
+        order2.setId(UUID.randomUUID());
+        order2.setCustomerName(customerName);
+        order2.setDate(LocalDateTime.now());
+        order2.setStatus(OrderStatus.COMPLETED);
+        order2.setCustomerAddress("Dummy Address");
+
+        TransportationWorker dummyWorker = new TransportationWorker();
+        dummyWorker.setName("Dummy Worker");
+        dummyWorker.setPhoneNumber("0123456789");
+        dummyWorker.setEmail("worker@example.com");
+        order2.setWorker(dummyWorker);
+
+        User dummyUser = new User();
+        dummyUser.setName(customerName);
+        order2.setUser(dummyUser);
+    }
+
+    @Then("the system should generate a unique receipt number for the order")
+    public void theSystemShouldGenerateAUniqueReceiptNumberForTheOrder() {
+        assertNotEquals(order.getReceipt().getReceiptId(), order2.getReceipt().getReceiptId());
+    }
+
+    @Then("the receipt should display the correct order details and total amount")
+    public void theReceiptShouldDisplayTheCorrectOrderDetailsAndTotalAmount() {
+        assertEquals(order.getUser(),dummyUser.getUsername());
+        assertEquals(order.getId(), dummyUser.getId());
     }
 }
